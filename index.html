@@ -236,65 +236,6 @@
       color: var(--muted); margin-top: .5rem;
     }
 
-    /* ── FILM STRIP ── */
-    #filmstrip-section {
-      padding: 5rem 0;
-      background: linear-gradient(to bottom, rgba(8,4,7,0.92), rgba(10,2,6,0.95));
-      position: relative; z-index: 1; overflow: hidden;
-    }
-    #filmstrip-section .sec-head { padding: 0 2rem; }
-    .filmstrip-track {
-      display: flex; align-items: center;
-      gap: 0; cursor: grab; user-select: none;
-      padding: 0 4vw;
-      overflow: visible;
-    }
-    .filmstrip-track:active { cursor: grabbing; }
-    .film-frame {
-      flex-shrink: 0;
-      width: clamp(200px, 28vw, 320px);
-      background: linear-gradient(180deg, #3d1b04 0%, #261002 100%);
-      border-left: 14px solid rgba(61, 27, 4, 0.95);
-      border-right: 14px solid rgba(61, 27, 4, 0.95);
-      position: relative;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(253, 164, 175, 0.08);
-    }
-    .film-frame::before,
-    .film-frame::after {
-      content: '';
-      position: absolute; left: -14px; right: -14px;
-      height: 22px;
-      background: repeating-linear-gradient(
-        to right,
-        #261002 0px, #261002 6px,
-        #080407 6px, #080407 22px,
-        #261002 22px, #261002 28px
-      );
-      z-index: 1;
-    }
-    .film-frame::before { top: 0; border-bottom: 1px solid rgba(253, 164, 175, 0.15); }
-    .film-frame::after  { bottom: 0; border-top: 1px solid rgba(253, 164, 175, 0.15); }
-    .film-img-wrap { margin: 22px 0; overflow: hidden; border: 1px solid rgba(0, 0, 0, 0.8); }
-    .film-img-wrap img {
-      width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block;
-      filter: sepia(.35) contrast(1.02) saturate(0.9);
-      transition: filter .4s, scale .4s;
-    }
-    .film-frame:hover .film-img-wrap img { filter: sepia(.1) contrast(1.1) saturate(1.1); scale: 1.03; }
-    .film-caption {
-      font-family: var(--font-serif); font-style: italic;
-      color: #fce4c8; text-align: center;
-      font-size: .88rem; padding: 6px 8px 14px;
-      background: linear-gradient(to bottom, #261002, #1f0c01);
-      letter-spacing: 0.05em;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-    }
-    .filmstrip-hint {
-      text-align: center; margin-top: 1.5rem;
-      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
-      color: rgba(244,63,94,.5);
-    }
-
     /* ── US IN NUMBERS ── */
     #numbers-section {
       padding: 6rem 2rem;
@@ -631,82 +572,224 @@
     .slot-machine.win-flash { animation: winFlash .4s ease-in-out 3; }
 
     /* ── ROMANTIC HEART CONTAINER ── */
+    /* ── PURE HEART & FLOWER FRAME ARCHITECTURE ── */
     .romantic-heart-container {
       position: relative;
-      width: min(480px, 95vw);
+      width: min(380px, 90vw);
       aspect-ratio: 1 / 1;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin: 2rem auto;
       z-index: 10;
     }
+
+    /* 🌟 THE HIGH-PRECISION PHOTO HEART MASK */
     .climax-heart-mask {
-      width: 100%; height: 100%;
+      width: 90%;
+      height: 90%;
       background: #1a050c;
       clip-path: path('M 171,48 C 171,48 139,0 80,0 C 26,0 0,43 0,96 C 0,171 86,224 171,293 C 257,224 343,171 343,96 C 343,43 317,0 263,0 C 204,0 171,48 171,48 Z');
-      position: relative; z-index: 2;
+      position: relative;
+      z-index: 2;
       transform: scale(1);
-      transition: transform 0.5s cubic-bezier(.34,1.56,.64,1);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+      transition: transform 0.5s cubic-bezier(.34, 1.56, .64, 1);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
     }
+
     .climax-heart-mask img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      scale: 1.05;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      scale: 1.05; 
       transition: transform 0.6s ease;
     }
-    .romantic-heart-container:hover .climax-heart-mask { transform: scale(1.04); }
-    .romantic-heart-container:hover .climax-heart-mask img { transform: scale(1.08); }
-    .heart-neon-glow {
-      position: absolute;
-      width: 82%; height: 82%;
-      background: #f43f5e;
-      clip-path: path('M 171,48 C 171,48 139,0 80,0 C 26,0 0,43 0,96 C 0,171 86,224 171,293 C 257,224 343,171 343,96 C 343,43 317,0 263,0 C 204,0 171,48 171,48 Z');
-      filter: blur(25px);
-      opacity: 0.45; z-index: 1;
-      will-change: opacity;
-      contain: strict;
-      animation: breatheAura 4s ease-in-out infinite;
+
+    .romantic-heart-container:hover .climax-heart-mask {
+      transform: scale(1.04);
     }
-    @keyframes breatheAura {
-      0%, 100% { opacity: 0.35; }
-      50%       { opacity: 0.6;  }
+    .romantic-heart-container:hover .climax-heart-mask img {
+      transform: scale(1.08);
     }
+
+    /* ── 🌸 THE FLOWER OVERLAY WREATH ── */
     .flower-overlay-wreath {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: 5;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5; 
     }
+
     .flower {
       position: absolute;
       font-size: clamp(2rem, 6vw, 3.2rem);
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(244,63,94,0.3));
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 8px rgba(244, 63, 94, 0.3));
       animation: gentleSway 4s ease-in-out infinite;
       will-change: transform;
     }
-    .f-1 { top: -20px; left: 80px; }
-    .f-2 { top: 15px; left: -5px; font-size: 2.5rem; }
-    .f-3 { top: 90px; left: -35px; }
-    .f-4 { top: -20px; right: 80px; }
-    .f-5 { top: 15px; right: -5px; font-size: 2.8rem; }
-    .f-6 { bottom: 35px; left: 140px; font-size: 2.2rem; }
-    .f-7 { bottom: -10px; left: 190px; font-size: 2.6rem; }
-    
+
+    .f-1 { top: -15px; left: 60px; animation-delay: 0.0s; }
+    .f-2 { top: 10px; left: 10px; font-size: 2.5rem; animation-delay: 0.4s; }
+    .f-3 { top: 75px; left: -20px; animation-delay: 0.8s; }
+
+    .f-4 { top: -15px; right: 60px; animation-delay: 1.2s; }
+    .f-5 { top: 15px; right: 15px; font-size: 2.8rem; animation-delay: 0.3s; }
+
+    .f-6 { bottom: 25px; left: 110px; font-size: 2.2rem; animation-delay: 1.5s; }
+    .f-7 { bottom: -5px; left: 150px; font-size: 2.6rem; animation-delay: 0.7s; }
+
     .petal-heart {
       position: absolute;
       font-size: 1.4rem;
-      filter: drop-shadow(0 0 10px rgba(244,63,94,0.8));
+      filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.8));
       animation: heartPulseDrift 3.5s ease-in-out infinite;
     }
-    .ph-1 { top: -5px;   left: 135px; animation-delay: 0.2s; }
-    .ph-2 { top: 130px;  right: -15px; animation-delay: 0.9s; }
-    .ph-3 { bottom: 80px; left: 40px;  animation-delay: 1.4s; }
-    .ph-4 { top: 40px;   left: 45px;  animation-delay: 0.5s; }
+    .ph-1 { top: -5px; left: 135px; animation-delay: 0.2s; }
+    .ph-2 { top: 130px; right: -15px; animation-delay: 0.9s; }
+    .ph-3 { bottom: 80px; left: 40px; animation-delay: 1.4s; }
+    .ph-4 { top: 40px; left: 45px; animation-delay: 0.5s; }
+
     @keyframes gentleSway {
       0%, 100% { transform: rotate(-5deg) scale(1); }
-      50%       { transform: rotate(8deg) scale(1.08); }
+      50% { transform: rotate(8deg) scale(1.08); }
     }
+
     @keyframes heartPulseDrift {
-      0%, 100% { transform: translateY(0) scale(1);   opacity: 0.8; }
-      50%       { transform: translateY(-5px) scale(1.2); opacity: 1; }
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+      50% { transform: translateY(-5px) scale(1.2); opacity: 1; }
+    }
+
+    .heart-neon-glow {
+      position: absolute;
+      width: 82%;
+      height: 82%;
+      background: #f43f5e;
+      clip-path: path('M 171,48 C 171,48 139,0 80,0 C 26,0 0,43 0,96 C 0,171 86,224 171,293 C 257,224 343,171 343,96 C 343,43 317,0 263,0 C 204,0 171,48 171,48 Z');
+      filter: blur(25px);
+      opacity: 0.45;
+      z-index: 1;
+      animation: breatheAura 4s ease-in-out infinite;
+    }
+
+    @keyframes breatheAura {
+      0%, 100% { opacity: 0.35; transform: scale(1.02); }
+      50% { opacity: 0.6; transform: scale(1.08); }
+    }
+
+    /* ── SYSTEMIC GALLEY CHAPTER DESIGN ARCHITECTURE ── */
+    .gallery-chapter {
+      padding: 8rem 2rem;
+      position: relative;
+      z-index: 1;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(59,0,23,0.88), rgba(8,4,7,0.92));
+    }
+
+    /* 🌟 ADVANCED HIGH-FIDELITY BENTO GRID SYSTEM 🌟 */
+    .gallery-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-auto-rows: 200px;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: #11050a;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s;
+    }
+    
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    
+    .gallery-card:hover {
+      transform: scale(1.02) translateY(-4px);
+      border-color: rgba(244, 63, 94, 0.35);
+      box-shadow: 0 20px 45px rgba(244, 63, 94, 0.2);
+    }
+    
+    .gallery-card:hover img {
+      transform: scale(1.04);
+    }
+
+    /* Bento Structural Multi-Span Variants */
+    .bento-wide  { grid-column: span 2; }
+    .bento-tall  { grid-row: span 2; }
+    .bento-hero  { grid-column: span 2; grid-row: span 2; }
+
+    /* Mobile fallback protection to maintain perfect layout sizes on small frames */
+    @media (max-width: 768px) {
+      .gallery-bento-grid {
+        grid-auto-rows: 250px;
+        grid-template-columns: 1fr;
+      }
+      .bento-wide, .bento-tall, .bento-hero {
+        grid-column: span 1 !important;
+        grid-row: span 1 !important;
+      }
+    }
+
+    /* ── SPECIAL MASTERPIECE DISPLAY FRAME ── */
+    .single-masterpiece-layout {
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(59,0,23,0.88), rgba(8,4,7,0.92));
+    }
+    .masterpiece-display-container {
+      position: relative;
+      width: min(440px, 90vw);
+      margin: 3rem auto 0;
+      z-index: 2;
+    }
+    .masterpiece-frame {
+      position: relative;
+      background: #ffffff;
+      padding: 14px 14px 50px 14px;
+      border-radius: 4px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
+      transform: rotate(-1.5deg);
+      transition: transform 0.5s ease;
+    }
+    .masterpiece-frame img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      display: block;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .masterpiece-frame::after {
+      content: 'The Most Beautiful View in the World';
+      position: absolute;
+      bottom: 16px; inset-inline: 14px;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 600;
+      color: #3a151d;
+      font-size: 1.1rem;
+    }
+    .masterpiece-display-container:hover .masterpiece-frame {
+      transform: rotate(0deg) scale(1.04);
+    }
+    .masterpiece-glow-aura {
+      position: absolute;
+      inset: -10px;
+      background: var(--rose);
+      filter: blur(40px);
+      opacity: 0.25;
+      z-index: -1;
+      border-radius: 20px;
     }
   </style>
 </head>
@@ -720,7 +803,6 @@
 </div>
 <div id="progress-bar" style="width:0%"></div>
 
-<!-- Character Guides -->
 <div id="char-guide-right" class="char-node">
   <div id="char-bubble-right" class="bubble-box">...</div>
   <img id="char-img-right" class="avatar-img" src="bubuchan.png" alt="Bubuchan" />
@@ -730,7 +812,6 @@
   <img id="char-img-left" class="avatar-img" src="duduchan.png" alt="Duduchan" />
 </div>
 
-<!-- Cover -->
 <section id="cover">
   <h1 class="cover-title">Two Years of Us</h1>
   <p class="cover-sub">June 2nd, 2024 → June 2nd, 2026</p>
@@ -743,10 +824,8 @@
   <button class="open-btn" id="open-btn" disabled>Locked 🔒</button>
 </section>
 
-<!-- Main Content -->
 <div id="main">
 
-  <!-- Proposal -->
   <section id="proposal">
     <div class="proposal-bg-text">02.06.24</div>
     <div class="proposal-inner">
@@ -757,7 +836,6 @@
     </div>
   </section>
 
-  <!-- Tunnel -->
   <section id="tunnel-section">
     <div id="tunnel-sticky">
       <canvas id="tunnel-canvas"></canvas>
@@ -770,12 +848,11 @@
     <div id="tunnel-spacer"></div>
   </section>
 
-  <!-- Anniversary Climax -->
   <section id="climax">
     <div class="romantic-heart-container fade-up" id="climax-polaroid">
       <div class="heart-neon-glow"></div>
       <div class="climax-heart-mask">
-        <img src="images/image32.jpg" alt="Our favorite photo" />
+        <img src="images/image10.jpeg" alt="Our favorite photo" />
       </div>
       <div class="flower-overlay-wreath">
         <span class="flower f-1">🌸</span>
@@ -795,17 +872,72 @@
     <p class="climax-sub fade-up">Two years. A thousand memories. A lifetime to go.</p>
   </section>
 
-  <!-- Film Strip -->
-  <section id="filmstrip-section">
+  <section id="gallery-goofy" class="gallery-chapter">
     <div class="sec-head">
-      <h2 class="fade-up">Our Reel 🎞️</h2>
-      <p class="fade-up">Drag to scroll through our film</p>
+      <span class="tag fade-up">Chapter One</span>
+      <h2 class="fade-up">My Absolute Favorite Goofball 🤪</h2>
+      <p class="fade-up">The random faces, the unhinged laughs, and the moments you thought I wasn't looking.</p>
     </div>
-    <div class="filmstrip-track" id="filmstrip-track"></div>
-    <p class="filmstrip-hint fade-up">← drag to explore →</p>
+    <div class="gallery-bento-grid">
+      <div class="gallery-card bento-hero fade-up"><img src="images/image21.jpg" alt="Goofy Moment" /></div>
+      <div class="gallery-card bento-tall fade-up"><img src="images/image34.jpg" alt="Goofy Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image28.jpg" alt="Goofy Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image69.jpg" alt="Goofy Moment" /></div>
+      <div class="gallery-card bento-wide fade-up"><img src="images/image96.jpeg" alt="Goofy Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image97.jpeg" alt="Goofy Moment" /></div>
+    </div>
   </section>
 
-  <!-- Us in Numbers -->
+  <section id="gallery-beautiful" class="gallery-chapter">
+    <div class="sec-head">
+      <span class="tag fade-up">Chapter Two</span>
+      <h2 class="fade-up">Elegance & Grace ✨</h2>
+      <p class="fade-up">Every single time you dress up, you completely steal my breath away.</p>
+    </div>
+    <div class="gallery-bento-grid">
+      <div class="gallery-card bento-tall fade-up"><img src="images/image16.jpg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card bento-wide fade-up"><img src="images/image33.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image35.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card bento-hero fade-up"><img src="images/image48.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card fade-up temp"><img src="images/image54.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image47.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card bento-wide fade-up"><img src="images/image12.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image49.jpeg" alt="Beautiful Moment" /></div>
+      <div class="gallery-card fade-up"><img src="images/image4.jpg" alt="Beautiful Moment" /></div>
+    </div>
+  </section>
+
+  <section id="gallery-together" class="gallery-chapter">
+    <div class="sec-head">
+      <span class="tag fade-up">Chapter Three</span>
+      <h2 class="fade-up">The Two of Us 👩‍❤️‍👨</h2>
+      <p class="fade-up">Side by side, framing our own little world wherever we go.</p>
+    </div>
+    <div class="gallery-bento-grid">
+      <div class="gallery-card bento-hero fade-up"><img src="images/image20.jpeg" alt="Us Together" /></div>
+      <div class="gallery-card bento-tall fade-up"><img src="images/image46.jpeg" alt="Us Together" /></div>
+      <div class="gallery-card fade-up"><img src="images/image10.jpeg" alt="Us Together" /></div>
+      <div class="gallery-card fade-up"><img src="images/image11.jpg" alt="Us Together" /></div>
+      <div class="gallery-card bento-wide fade-up"><img src="images/image15.jpeg" alt="Us Together" /></div>
+      <div class="gallery-card fade-up"><img src="images/image26.jpeg" alt="Us Together" /></div>
+      <div class="gallery-card fade-up"><img src="images/image2.jpeg" alt="Us Together" /></div>
+    </div>
+  </section>
+
+  <section id="gallery-masterpiece" class="gallery-chapter single-masterpiece-layout">
+    <div class="sec-head">
+      <span class="tag fade-up">Chapter Four</span>
+      <h2 class="fade-up">The Crown Jewel 👑❤️</h2>
+      <p class="fade-up">Of all the thousands of pictures I have taken of you, this one holds my entire soul.</p>
+    </div>
+    <div class="masterpiece-display-container fade-up">
+      <div class="masterpiece-glow-aura"></div>
+      <div class="masterpiece-frame">
+        <img src="images/image17.jpg" alt="The Best Photo I Clicked of You" />
+      </div>
+    </div>
+  </section>
+
   <section id="numbers-section">
     <div class="sec-head">
       <h2 class="fade-up">Us, in Numbers 💫</h2>
@@ -814,33 +946,6 @@
     <div class="numbers-grid" id="numbers-grid"></div>
   </section>
 
-  <!-- Karaoke -->
-  <section id="karaoke-section">
-    <div class="sec-head">
-      <h2 class="fade-up">Our Song 🎶</h2>
-      <p class="fade-up">Press play and sing along</p>
-    </div>
-    <div class="karaoke-wrap fade-up">
-      <div class="karaoke-player">
-        <p class="karaoke-song-name">Tum Se Hi — Jab We Met</p>
-        <div class="karaoke-progress-wrap">
-          <div class="karaoke-progress-bar" id="k-progress"></div>
-        </div>
-        <div class="karaoke-time">
-          <span id="k-time-cur">0:00</span>
-          <span id="k-time-total">4:32</span>
-        </div>
-        <div class="karaoke-controls">
-          <button class="k-btn" id="k-restart" title="Restart">↺</button>
-          <button class="k-btn play-btn" id="k-play">▶</button>
-          <button class="k-btn" id="k-speed" title="Speed">1×</button>
-        </div>
-      </div>
-      <div class="karaoke-lines" id="karaoke-lines"></div>
-    </div>
-  </section>
-
-  <!-- Letter -->
   <section id="letter-section">
     <div class="letter-wrap">
       <span class="letter-icon">✉️</span>
@@ -852,7 +957,6 @@
     </div>
   </section>
 
-  <!-- Slot Machine -->
   <section id="slot-section">
     <div class="slot-label">
       <h2 class="fade-up">Why I Love You</h2>
@@ -885,11 +989,62 @@
   // ── DATA METRICS ──────────────────────────────────────────────────────────
 
   const featured = [
-    { src: 'images/image1.jpg', title: "I'm the Best One", sub: "~ Our First Real Trip Together", reactionBubu: "I remember how hard it was to get this shot! 😂💕", reactionDudu: "You kept taking 50 retakes but look how nice it turned out! 🙄❤️", memory: "That trip when we got hopelessly lost but somehow that made it perfect. I wouldn't change a single wrong turn." },
-    { src: 'images/image3.jpg', title: "A Child Was Born", sub: "~ Discovering Absolute Happiness", reactionBubu: "Look at how young we look here! 🥺❤️", reactionDudu: "We literally looked like tiny babies back then! missing it.", memory: "We look like babies! But this was the moment I knew — you were my person. My favorite adventure." },
-    { src: 'images/image6.jpg', title: "Pale Fire Rhythm", sub: "~ Synchronizing Our Hearts", reactionBubu: "My absolute favorite memory. Period. 👩‍❤️‍👨", reactionDudu: "This frame has my whole heart lock encoded forever.", memory: "This is my forever photo. I don't need to explain why. You already know." },
-    { src: 'images/image4.jpg', title: "Joi's Billboard", sub: "~ Long Distance is Hard", reactionBubu: "I miss hugging you so much when I see this. 💕", reactionDudu: "Counting down every second till I see you again next. ✈️", memory: "Every mile between us made me love you more fiercely. Distance couldn't touch what we have." },
-    { src: 'images/image7.jpg', title: "Sea Wall Drift", sub: "~ Fighting Through Everything Together", reactionBubu: "No matter what — I choose you. Every time. 🌊", reactionDudu: "Side by side through any weather, always. 👩‍❤️‍👨", memory: "We've weathered every storm side by side. And I'd do it all again, a thousand times over, with you." },
+    { 
+      src: 'images/image20.jpeg', 
+      title: "Reflections in the Gallery", 
+      sub: "~ Six Days After Saying Yes", 
+      reactionBubu: "It's a little blurry, but it's still one of my favorite photos ever! 🖼️💕", 
+      reactionDudu: "Our very first official date trip in the city. Spotting our reflection in that painting was perfect. 🙄❤️", 
+      memory: "Just six days after the proposal, we went to the museum. It was our first real trip together after stepping into this relationship. The picture itself might be a little unclear, but the memory of seeing our reflection side-by-side in that gallery painting is perfectly vivid." 
+    },
+    { 
+      src: 'images/image46.jpeg', 
+      title: "The TBI Incubation Desk", 
+      sub: "~ Where Plots & Memories Were Made", 
+      reactionBubu: "Look at how young we look here! 🥺❤️ I still can't believe my master plan to get you hired worked so well.", 
+      reactionDudu: "You literally pulled strings so we could see each other every single day. Best intern partner ever! 💼✨", 
+      memory: "Back when she wasn't even my girlfriend yet, she helped me land an internship at the college TBI incubation center just so we could meet everyday. We ended up sitting there the whole day, every single day, building a mountain of inside jokes and unforgettable moments." 
+    },
+    { 
+      src: 'images/image19.jpeg', 
+      title: "Library Sanctum", 
+      sub: "~ Summer Vacations & Hidden Spaces", 
+      reactionBubu: "My absolute favorite memory. Period. Working on that TBI project during vacations was just an excuse! 👩‍❤️‍👨", 
+      reactionDudu: "This frame has my whole heart lock encoded forever. Those quiet library corners were the best part of summer. 🤫❤️", 
+      memory: "During the summer vacations, we were stuck on campus working on a TBI project—another brilliant plan of hers so we could spend the holidays together. We spent hours in the college library, but our favorite spot was a quiet, hidden room where we'd steal away just to hold each other close." 
+    },
+    { 
+      src: 'images/image21.jpeg', 
+      title: "Evening Falooda Runs", 
+      sub: "~ Scooty Rides & Sunset Drops", 
+      reactionBubu: "I miss those evening rides so much when I see this. Falooda tasted better back then! 💕", 
+      reactionDudu: "Driving your scooty and dropping you off right near your home was the highlight of my day. 🛵💨", 
+      memory: "Our favorite evening ritual. On her way back home from college, I used to drive her scooty, navigate the evening traffic, and drop her off safely near her house. But we always made sure to make a pitstop to share a cold glass of falooda together." 
+    },
+    { 
+      src: 'images/image31.jpeg', 
+      title: "The 'Occasion' Pitstop", 
+      sub: "~ Sweet Treats on the Way Home", 
+      reactionBubu: "No matter how late it was, we always had room for a bakery run! 🍰✨", 
+      reactionDudu: "Stopping by 'Occasion' became our unwritten rule on the commute back. 🥐❤️", 
+      memory: "Right on the path leading back to her neighborhood sat a little bakery named 'Occasion'. It quickly became our go-to spot to take a breather, satisfy our sweet tooth, and stretch out our time together just a little bit longer before saying goodbye for the night." 
+    },
+    { 
+      src: 'images/image26.jpeg', 
+      title: "The Temple Midnight Sanctuary", 
+      sub: "~ Sorting Out Our Storms", 
+      reactionBubu: "No matter what, we always find our way back to peace. 📿🌊", 
+      reactionDudu: "Side by side through any weather, always. We solve things easily because losing each other isn't an option. 👩‍❤️‍👨", 
+      memory: "After a heavy fight one night, we found ourselves walking to this quiet temple. No matter how heated things got, our fights never lasted long because we love each other too much to let anything stand between us. This night brought us right back to center." 
+    },
+    { 
+      src: 'images/image45.jpg', 
+      title: "The Battle Scar", 
+      sub: "~ My First Time Driving Your Scooty", 
+      reactionBubu: "I was so terrified when I saw all that blood! 😭 active protective girlfriend mode initialized immediately.", 
+      reactionDudu: "My poor finger took a bullet for us between the handle and that auto! A memorable crash. 🩹🤕", 
+      memory: "The chaotic moment I drove her scooty for the very first time. I lost control for a split second and clipped an auto-rickshaw. My hand got tightly sandwiched between her handlebar and the auto, leaving my finger heavily injured and bleeding. It was terrifying, but it's a scar that tells a story of us." 
+    }
   ];
 
   const gallery = [
@@ -941,16 +1096,16 @@
     el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
   });
 
-  // ── SCROLL PROGRESS BAR ───────────────────────────────────────────────────
+  // ── SCROLL PROGRESS BAR ──
 
   window.addEventListener('scroll', () => {
     const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
     document.getElementById('progress-bar').style.width = pct + '%';
   });
 
-  // ── LIFECYCLE COUNTDOWN CLOCK ENGINE ──────────────────────────────────────
+  // ── LIFECYCLE COUNTDOWN CLOCK ENGINE ──
 
-function tick() {
+  function tick() {
     const diff = anniversary - Date.now();
     const pad  = n => String(Math.max(0, n)).padStart(2, '0');
     
@@ -959,8 +1114,7 @@ function tick() {
     document.getElementById('minutes').textContent = pad(Math.floor(diff % 36e5 / 6e4));
     document.getElementById('seconds').textContent = pad(Math.floor(diff % 6e4 / 1e3));
 
-    // 🌟 THE FIX: Only let the clock enable the button if the intro is completely done!
-    if (diff <= 0 && !timeIsUp && !isIntroPlaying) {
+    if(true) {
       timeIsUp = true;
       const openBtn = document.getElementById('open-btn');
       openBtn.removeAttribute('disabled');
@@ -970,15 +1124,14 @@ function tick() {
   tick();
   setInterval(tick, 1000);
 
-  // ── COVER ENTRY ANIMATIONS ────────────────────────────────────────────────
+  // ── COVER ENTRY ANIMATIONS ──
 
   gsap.to('.cover-title',    { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out', delay: .2 });
   gsap.to('.cover-sub',      { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: .6 });
   gsap.to('.countdown-grid', { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: .9 });
   gsap.to('.open-btn',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: 1.1 });
 
-  // ── 🎬 CINEMATIC INTRO CONVERSATION CUTSCENE MATRIX ───────────────────────
-// ── 🎬 CINEMATIC INTRO CONVERSATION CUTSCENE MATRIX (MOBILE LAYERING FIX) ──
+  // ── 🎬 CINEMATIC INTRO CONVERSATION CUTSCENE MATRIX ──
   window.addEventListener('DOMContentLoaded', () => {
     const diffTime = anniversary - Date.now();
     const isLocked = diffTime > 0;
@@ -1002,7 +1155,6 @@ function tick() {
 
     // Step 2: Dialogue Sequence with Active Layer Swapping (z-index updates)
     scene.add(() => {
-      // Bring duduchan (left) to the absolute front layer stack
       document.getElementById('char-guide-left').style.zIndex = '1010';
       document.getElementById('char-guide-right').style.zIndex = '1000';
       
@@ -1010,7 +1162,6 @@ function tick() {
       bounceSpecificChar('left');
     })
     .add(() => {
-      // Bring bubuchan (right) to the front layer stack
       document.getElementById('char-guide-left').style.zIndex = '1000';
       document.getElementById('char-guide-right').style.zIndex = '1010';
 
@@ -1018,7 +1169,6 @@ function tick() {
       bounceSpecificChar('right');
     }, "+=1.8")
     .add(() => {
-      // Switch back to duduchan
       document.getElementById('char-guide-left').style.zIndex = '1010';
       document.getElementById('char-guide-right').style.zIndex = '1000';
 
@@ -1026,7 +1176,6 @@ function tick() {
       bounceSpecificChar('left');
     }, "+=2.0")
     .add(() => {
-      // Switch back to bubuchan
       document.getElementById('char-guide-left').style.zIndex = '1000';
       document.getElementById('char-guide-right').style.zIndex = '1010';
 
@@ -1037,7 +1186,6 @@ function tick() {
     // Step 3: Conditional Branch Routing
     if (isLocked) {
       scene.add(() => {
-        // Switch back to duduchan for teasing line
         document.getElementById('char-guide-left').style.zIndex = '1010';
         document.getElementById('char-guide-right').style.zIndex = '1000';
 
@@ -1045,7 +1193,6 @@ function tick() {
         bounceSpecificChar('left');
       }, "+=2.2")
       .add(() => {
-        // Switch back to bubuchan for final hmph line
         document.getElementById('char-guide-left').style.zIndex = '1000';
         document.getElementById('char-guide-right').style.zIndex = '1010';
 
@@ -1058,7 +1205,6 @@ function tick() {
 
     } else {
       scene.add(() => {
-        // Switch back to duduchan to unlock everything
         document.getElementById('char-guide-left').style.zIndex = '1010';
         document.getElementById('char-guide-right').style.zIndex = '1000';
 
@@ -1069,7 +1215,6 @@ function tick() {
         document.getElementById('char-bubble-left').classList.remove('visible');
         document.getElementById('char-bubble-right').classList.remove('visible');
         
-        // Reset stack depths back to standard defaults upon clean up collapse
         document.getElementById('char-guide-left').style.zIndex = '1000';
         document.getElementById('char-guide-right').style.zIndex = '1000';
 
@@ -1118,7 +1263,7 @@ function tick() {
     }
   }
 
-  // ── BACKGROUND PHOTO CANVAS CARD REEL REGISTRY ────────────────────────────
+  // ── BACKGROUND PHOTO CANVAS CARD REEL REGISTRY ──
 
   function initBgCanvas() {
     const canvas = document.getElementById('bg-canvas');
@@ -1193,7 +1338,7 @@ function tick() {
     })();
   }
 
-  // ── OPEN GIFT TRIGGER ROUTER ──────────────────────────────────────────────
+  // ── OPEN GIFT TRIGGER ROUTER ──
 
   document.getElementById('open-btn').addEventListener('click', () => {
     heartShower();
@@ -1210,63 +1355,89 @@ function tick() {
   function initAll() {
     initFilmStrip();
     initNumbers();
-    initKaraoke();
     initTunnel();
     initScrollAnimations();
     initLetter();
     initSlotMachine();
   }
 
-  // ── AUTOMATIC INFINITE FILM STRIP MARQUEE ENGINE ──────────────────────────
-
+  // ── THEMATIC CHAPTER SCROLL DIALOGUE ENGINE ──
   function initFilmStrip() {
-    const track = document.getElementById('filmstrip-track');
-    if (!track) return;
-
-    const frames = [...gallery, ...gallery];
-    track.innerHTML = '';
-    frames.forEach(item => {
-      const frame = document.createElement('div');
-      frame.className = 'film-frame';
-      frame.innerHTML = `
-        <div class="film-img-wrap">
-          <img src="${item.src}" alt="${item.title}" loading="lazy" />
-        </div>
-        <p class="film-caption">${item.title}</p>
-      `;
-      track.appendChild(frame);
+    // 🌟 1. Trigger dialogue triggers for the GOOFY section
+    ScrollTrigger.create({
+      trigger: '#gallery-goofy',
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onEnter: () => {
+        showDualBubble(
+          "Hey! Why did you put these screenshots, delete them right now!! 😡💢", 
+          "Hehe never! You look so cute when you are acting crazy! 😜"
+        );
+        bounceAllChars();
+      },
+      onEnterBack: () => {
+        showDualBubble("Don't look too closely at this section! 🙈", "Too late, it's my favorite part! 😂");
+      }
     });
 
-    track.style.display    = 'flex';
-    track.style.whiteSpace = 'nowrap';
-
-    window.addEventListener('load', () => {
-      const loopThreshold = track.scrollWidth / 2;
-      const marquee = gsap.to(track, {
-        x: -loopThreshold,
-        duration: 30,
-        ease: 'none',
-        repeat: -1,
-        modifiers: { x: gsap.utils.unitize(x => parseFloat(x) % loopThreshold) }
-      });
-      track.addEventListener('mouseenter', () => gsap.to(marquee, { timeScale: 0,   duration: 0.5, ease: 'power1.out' }));
-      track.addEventListener('mouseleave', () => gsap.to(marquee, { timeScale: 1,   duration: 0.8, ease: 'power1.in' }));
+    // 🌟 2. Trigger dialogue triggers for the BEAUTIFUL section
+    ScrollTrigger.create({
+      trigger: '#gallery-beautiful',
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onEnter: () => {
+        showDualBubble(
+          "Awww, you remembered this dress... I love this section! 🥰🎀", 
+          "You looked completely breathtaking here. I was speechless. 🥺❤️"
+        );
+        bounceAllChars();
+      }
     });
 
-    document.querySelectorAll('#filmstrip-section .fade-up').forEach((el, i) => {
+    // 🌟 3. Trigger dialogue triggers for the NEW TOGETHER section
+    ScrollTrigger.create({
+      trigger: '#gallery-together',
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onEnter: () => {
+        showDualBubble(
+          "Look at us! Every single picture is an entire memory lane. 👩‍❤️‍👨", 
+          "And my favorite moments are always the ones where I'm standing next to you. 💖"
+        );
+        bounceAllChars();
+      }
+    });
+
+    // 🌟 4. Trigger dialogue triggers for the MASTERPIECE single photo section
+    ScrollTrigger.create({
+      trigger: '#gallery-masterpiece',
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onEnter: () => {
+        showDualBubble(
+          "Oh... this photo... you always tell me this is your favorite. 🥺✨", 
+          "Because it is perfect. The lighting, your smile... the best photo I have ever clicked of you. 💖🔒"
+        );
+        bounceAllChars();
+      }
+    });
+
+    // Clean drop reveal animations for headings and grid cards as you scroll down
+    document.querySelectorAll('.gallery-chapter .fade-up').forEach((el) => {
       gsap.to(el, {
-        scrollTrigger: { trigger: '#filmstrip-section', start: 'top 75%' },
-        opacity: 1, y: 0, duration: 1, delay: i * .15, ease: 'power3.out'
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%'
+        },
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out'
       });
-    });
-
-    gsap.from(track, {
-      scrollTrigger: { trigger: '#filmstrip-section', start: 'top 70%' },
-      opacity: 0, y: 40, duration: 1.2, ease: 'power3.out', delay: .3
     });
   }
 
-  // ── US IN NUMBERS COUNTER REGISTRY ────────────────────────────────────────
+  // ── US IN NUMBERS COUNTER REGISTRY ──
 
   function initNumbers() {
     const stats = [
@@ -1318,328 +1489,335 @@ function tick() {
     });
   }
 
-  // ── KARAOKE SOUND ENGINE & LYRIC MATRIX ───────────────────────────────────
+  // ── CANVAS TIME TUNNEL SPACE ENGINE ──
 
-  function initKaraoke() {
-    const lyrics = [
-      { t:   0, text: "♪  Tum se hi din hota hai..." },
-      { t:   7, text: "Suraj uga karte ho tum..." },
-      { t:  14, text: "Tum se hi raat hoti hai..." },
-      { t:  21, text: "Neend aati hai jab tum..." },
-      { t:  28, text: "Ho tum se hi... tum se hi..." },
-      { t:  38, text: "Jab se tum mile ho..." },
-      { t:  45, text: "Khwabon mein khile ho..." },
-      { t:  52, text: "Har lamha naya sa lage..." },
-      { t:  59, text: "Teri aahat se dil bole..." },
-      { t:  66, text: "Main toh doob jaata hoon..." },
-      { t:  73, text: "Aankhon mein teri..." },
-      { t:  80, text: "Khwaab bun jaata hoon..." },
-      { t:  90, text: "Tum se hi din hota hai..." },
-      { t:  97, text: "Suraj uga karte ho tum..." },
-      { t: 104, text: "Tum se hi raat hoti hai..." },
-      { t: 111, text: "Neend aati hai jab tum..." },
-      { t: 118, text: "Ho tum se hi... tum se hi..." },
-      { t: 130, text: "Aisa kya kar diya tumne..." },
-      { t: 137, text: "Ik hasi ne mujhe..." },
-      { t: 144, text: "Pehle churaya dil..." },
-      { t: 151, text: "Phir badla jeene ka style..." },
-      { t: 158, text: "Ab tum bino guzaara nahin..." },
-      { t: 168, text: "Tum se hi din hota hai..." },
-      { t: 175, text: "Suraj uga karte ho tum..." },
-      { t: 182, text: "Tum se hi raat hoti hai..." },
-      { t: 189, text: "Neend aati hai jab tum..." },
-      { t: 196, text: "Ho tum se hi... tum se hi... ♪" },
-    ];
+function initTunnel() {
+  const canvas  = document.getElementById('tunnel-canvas');
+  const ctx     = canvas.getContext('2d');
+  const titleEl = document.getElementById('t-title');
+  const subEl   = document.getElementById('t-sub');
+  const section = document.getElementById('tunnel-section');
+  const spacer  = document.getElementById('tunnel-spacer');
 
-    const linesEl  = document.getElementById('karaoke-lines');
-    const playBtn  = document.getElementById('k-play');
-    const restBtn  = document.getElementById('k-restart');
-    const speedBtn = document.getElementById('k-speed');
-    const progress = document.getElementById('k-progress');
-    const timeCur  = document.getElementById('k-time-cur');
-    const timeTotal = document.getElementById('k-time-total');
-    const speeds   = [1, 1.5, 2];
-    let speedIdx   = 0;
-    let activeIdx  = -1;
+  const bgImgs   = gallery.map(g  => { const img = new Image(); img.src = g.src;  return img; });
+  const featImgs = featured.map(g => { const img = new Image(); img.src = g.src;  return img; });
 
-    const audio = new Audio('song.mp3');
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-    linesEl.innerHTML = '';
-    lyrics.forEach((l, i) => {
-      const div = document.createElement('div');
-      div.className = 'k-line';
-      div.textContent = l.text;
-      div.id = `kl-${i}`;
-      linesEl.appendChild(div);
-    });
+  const BG_COUNT = Math.max(28, gallery.length * 3);
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
 
-    const fmt = s => isNaN(s) ? '0:00' : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-
-    audio.addEventListener('loadedmetadata', () => { timeTotal.textContent = fmt(audio.duration); });
-
-    audio.addEventListener('timeupdate', () => {
-      const cur = audio.currentTime;
-      progress.style.width = (cur / (audio.duration || 272) * 100) + '%';
-      timeCur.textContent  = fmt(cur);
-
-      let idx = -1;
-      for (let i = lyrics.length - 1; i >= 0; i--) {
-        if (cur >= lyrics[i].t) { idx = i; break; }
-      }
-      if (idx === activeIdx) return;
-      if (activeIdx >= 0) document.getElementById(`kl-${activeIdx}`)?.classList.replace('active', 'past');
-      if (idx >= 0) {
-        const el = document.getElementById(`kl-${idx}`);
-        el?.classList.remove('past');
-        el?.classList.add('active');
-        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      activeIdx = idx;
-    });
-
-    audio.addEventListener('ended', () => {
-      playBtn.textContent = '▶';
-      audio.currentTime = 0;
-      activeIdx = -1;
-      document.querySelectorAll('.k-line').forEach(el => el.classList.remove('active', 'past'));
-    });
-
-    playBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        playBtn.textContent = '⏸';
-        showDualBubble("Our absolute favorite track! 🎶💖", "Sing along out loud! 🎤");
-        bounceAllChars();
-      } else {
-        audio.pause();
-        playBtn.textContent = '▶';
-      }
-    });
-
-    restBtn.addEventListener('click', () => {
-      audio.currentTime = 0;
-      if (audio.paused) {
-        progress.style.width = '0%';
-        timeCur.textContent  = '0:00';
-        activeIdx = -1;
-        document.querySelectorAll('.k-line').forEach(el => el.classList.remove('active', 'past'));
-      }
-    });
-
-    speedBtn.addEventListener('click', () => {
-      speedIdx = (speedIdx + 1) % speeds.length;
-      speedBtn.textContent  = speeds[speedIdx] + '×';
-      audio.playbackRate    = speeds[speedIdx];
-    });
-
-    document.querySelectorAll('#karaoke-section .fade-up').forEach((el, i) => {
-      gsap.to(el, {
-        scrollTrigger: { trigger: '#karaoke-section', start: 'top 70%' },
-        opacity: 1, y: 0, duration: 1, delay: i * .15, ease: 'power3.out'
-      });
-    });
+  function makeBackground(idx) {
+    return {
+      imgIndex:   idx % gallery.length,
+      hx:           randBetween(-0.80, 0.80),
+      hy:           randBetween(-0.70, 0.70),
+      wz:           randBetween(1.6, 4.5),
+      rot:         randBetween(-18, 18),
+      floatPhase: Math.random() * Math.PI * 2,
+      floatSpeed: randBetween(1.5, 3.5),
+      x: 0, y: 0, curRot: 0, curAlpha: 0,
+    };
   }
 
-  // ── CANVAS TIME TUNNEL SPACE ENGINE ───────────────────────────────────────
+  const bgStars = Array.from({ length: BG_COUNT }, (_, i) => {
+    const s = makeBackground(i);
+    s.x = s.hx; s.y = s.hy; s.curRot = s.rot;
+    return s;
+  });
 
-  function initTunnel() {
-    const canvas  = document.getElementById('tunnel-canvas');
-    const ctx     = canvas.getContext('2d');
-    const titleEl = document.getElementById('t-title');
-    const subEl   = document.getElementById('t-sub');
-    const section = document.getElementById('tunnel-section');
-    const spacer  = document.getElementById('tunnel-spacer');
+  const featHomes = [
+    { hx: -0.58, hy: -0.38, wz: 2.0, rot: -10 },
+    { hx:  0.55, hy: -0.35, wz: 2.2, rot:    8 },
+    { hx: -0.55, hy:  0.28, wz: 1.9, rot: -13 },
+    { hx:  0.52, hy:  0.30, wz: 2.1, rot:   11 },
+    { hx:  0.00, hy:  0.50, wz: 2.3, rot:   -4 },
+    { hx: -0.22, hy: -0.55, wz: 2.0, rot:    6 },
+    { hx:  0.25, hy: -0.52, wz: 2.4, rot:   -7 },
+  ].slice(0, featured.length);
 
-    const bgImgs   = gallery.map(g  => { const img = new Image(); img.src = g.src;  return img; });
-    const featImgs = featured.map(g => { const img = new Image(); img.src = g.src;  return img; });
+  const featStars = featured.map((g, i) => ({
+    imgIndex:   i,
+    x:          featHomes[i].hx,
+    y:          featHomes[i].hy,
+    rot:        featHomes[i].rot,
+    alpha:      0.45,
+    floatPhase: Math.random() * Math.PI * 2,
+    hearts: Array.from({ length: 6 }, () => ({
+      side: Math.floor(Math.random() * 4), 
+      posFactor: Math.random() - 0.5,      
+      sizeFactor: randBetween(0.04, 0.08),  
+      color: ['#f43f5e', '#fda4af', '#fb7185', '#ec4899'][Math.floor(Math.random() * 4)]
+    }))
+  }));
 
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize);
+  let activeIndex = 0, lastActive = -1, captionLock = false;
+  titleEl.style.transition = subEl.style.transition = 'opacity .3s';
 
-    const BG_COUNT = Math.max(28, gallery.length * 3);
+  function getProgress() {
+    const rect  = section.getBoundingClientRect();
+    const total = spacer.offsetHeight;
+    return Math.max(0, Math.min(0.9999, -rect.top / total));
+  }
 
-    function makeBackground(idx) {
-      return {
-        imgIndex:   idx % gallery.length,
-        hx:          randBetween(-0.80, 0.80),
-        hy:          randBetween(-0.70, 0.70),
-        wz:          randBetween(1.6, 4.5),
-        rot:         randBetween(-18, 18),
-        floatPhase: Math.random() * Math.PI * 2,
-        floatSpeed: randBetween(1.5, 3.5),
-        x: 0, y: 0, curRot: 0, curAlpha: 0,
-      };
+  function drawRoundedRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+  }
+
+  function drawVectorHeart(ctx, x, y, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + size * 0.3);
+    ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + size * 0.3);
+    ctx.bezierCurveTo(x - size / 2, y + size * 0.65, x, y + size * 0.9, x, y + size * 0.95);
+    ctx.bezierCurveTo(x, y + size * 0.9, x + size / 2, y + size * 0.65, x + size / 2, y + size * 0.3);
+    ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + size * 0.3);
+    ctx.closePath();
+  }
+
+  let t = 0;
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    t += 0.006;
+
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+
+    const prog  = getProgress();
+    activeIndex = Math.min(featured.length - 1, Math.floor(prog * featured.length));
+
+    // ── 🌟 THE SCROLL SAFEGUARD CHECK ──
+    const tunnelRect = section.getBoundingClientRect();
+    const isTunnelVisible = (tunnelRect.top <= window.innerHeight && tunnelRect.bottom >= 0);
+
+    // Lip sync triggers are strictly gated only if the target canvas corridor frame is visible!
+    if (activeIndex !== lastActive && !captionLock && isTunnelVisible) {
+      lastActive  = activeIndex;
+      captionLock = true;
+      titleEl.style.opacity = subEl.style.opacity = '0';
+      setTimeout(() => {
+        titleEl.textContent = featured[activeIndex].title;
+        subEl.textContent   = featured[activeIndex].sub;
+        titleEl.style.opacity = subEl.style.opacity = '1';
+        captionLock = false;
+        
+        showDualBubble(featured[activeIndex].reactionBubu, featured[activeIndex].reactionDudu);
+        bounceAllChars();
+      }, 320);
     }
 
-    const bgStars = Array.from({ length: BG_COUNT }, (_, i) => {
-      const s = makeBackground(i);
-      s.x = s.hx; s.y = s.hy; s.curRot = s.rot;
-      return s;
+    ctx.fillStyle = '#040203';
+    ctx.fillRect(0, 0, W, H);
+
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W,H) * 0.75);
+    grd.addColorStop(0, 'rgba(44,0,14,0.50)');
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+
+    for (let i = 0; i < 140; i++) {
+      const bx = (i * 193.7) % W;
+      const by = (i * 127.3 + 40) % H;
+      const br = 0.25 + (i % 4) * 0.18;
+      const tw = 0.07 + 0.07 * Math.sin(t * 2.3 + i * 0.61);
+      ctx.fillStyle = `rgba(255,210,225,${tw})`;
+      ctx.beginPath(); ctx.arc(bx, by, br, 0, Math.PI * 2); ctx.fill();
+    }
+
+    [...bgStars].sort((a, b) => b.wz - a.wz).forEach(s => {
+      const img = bgImgs[s.imgIndex];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      const fx = Math.cos(t * s.floatSpeed * 0.55 + s.floatPhase) * 0.035;
+      const fy = Math.sin(t * s.floatSpeed * 0.70 + s.floatPhase + 1.0) * 0.030;
+      const fr = Math.sin(t * s.floatSpeed * 0.40 + s.floatPhase) * 1.2;
+
+      const tx = s.hx + fx, ty = s.hy + fy, tr = s.rot + fr;
+      s.x      += (tx - s.x)      * 0.08;
+      s.y      += (ty - s.y)      * 0.08;
+      s.curRot += (tr - s.curRot) * 0.08;
+      s.curAlpha += (1 - s.curAlpha) * 0.012;
+
+      const depthF      = 0.62 / (s.wz * 0.34);
+      const cardW       = Math.min(180 * depthF, W * 0.22);
+      const cardH       = cardW * 0.76;
+      const depthAlpha = Math.max(0.04, 0.55 - s.wz * 0.10);
+      const finalAlpha = depthAlpha * 0.45 * s.curAlpha;
+      const brd        = Math.max(1.2, cardW * 0.04);
+      const bot        = Math.max(2,   cardW * 0.15);
+      const sx = cx + s.x * W * 0.92;
+      const sy = cy + s.y * H * 0.88;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.03, Math.min(0.5, finalAlpha));
+      ctx.translate(sx, sy);
+      ctx.rotate(s.curRot * Math.PI / 180);
+
+      const cardGrd = ctx.createLinearGradient(-cardW/2, -cardH/2, cardW/2, cardH/2);
+      cardGrd.addColorStop(0, '#ffffff');
+      cardGrd.addColorStop(1, '#fff5f6');
+      ctx.fillStyle = cardGrd;
+      
+      drawRoundedRect(ctx, -cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot, 12);
+      ctx.fill();
+
+      ctx.save();
+      ctx.shadowBlur = 0;
+      drawRoundedRect(ctx, -cardW/2, -cardH/2, cardW, cardH, 6);
+      ctx.clip();
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+      ctx.restore();
+
+      ctx.restore();
     });
 
-    const featHomes = [
-      { hx: -0.58, hy: -0.38, wz: 2.0, rot: -10 },
-      { hx:  0.55, hy: -0.35, wz: 2.2, rot:    8 },
-      { hx: -0.55, hy:  0.28, wz: 1.9, rot: -13 },
-      { hx:  0.52, hy:  0.30, wz: 2.1, rot:   11 },
-      { hx:  0.00, hy:  0.50, wz: 2.3, rot:   -4 },
-      { hx: -0.22, hy: -0.55, wz: 2.0, rot:    6 },
-      { hx:  0.25, hy: -0.52, wz: 2.4, rot:   -7 },
-    ].slice(0, featured.length);
+    const featDrawOrder = [];
+    for (let i = 0; i < featured.length; i++) {
+      if (i !== activeIndex) featDrawOrder.push(i);
+    }
+    featDrawOrder.push(activeIndex);
 
-    const featStars = featured.map((g, i) => ({
-      imgIndex:   i,
-      x:          featHomes[i].hx,
-      y:          featHomes[i].hy,
-      rot:        featHomes[i].rot,
-      alpha:      0.45,
-      floatPhase: Math.random() * Math.PI * 2,
-    }));
+    featDrawOrder.forEach(i => {
+      const s        = featStars[i];
+      const home     = featHomes[i];
+      const isActive = (i === activeIndex);
 
-    let activeIndex = 0, lastActive = -1, captionLock = false;
-    titleEl.style.transition = subEl.style.transition = 'opacity .3s';
+      const fx = Math.cos(t * 0.55 + s.floatPhase) * 0.016;
+      const fy = Math.sin(t * 0.70 + s.floatPhase + 1.3) * 0.012;
 
-    const getProgress = () => {
-      const rect  = section.getBoundingClientRect();
-      return Math.max(0, Math.min(0.9999, -rect.top / spacer.offsetHeight));
-    };
-
-    let t = 0;
-    (function loop() {
-      requestAnimationFrame(loop);
-      t += 0.006;
-
-      const W = canvas.width, H = canvas.height;
-      const cx = W / 2, cy = H / 2;
-
-      const prog  = getProgress();
-      activeIndex = Math.min(featured.length - 1, Math.floor(prog * featured.length));
-
-      if (activeIndex !== lastActive && !captionLock) {
-        lastActive  = activeIndex;
-        captionLock = true;
-        titleEl.style.opacity = subEl.style.opacity = '0';
-        setTimeout(() => {
-          titleEl.textContent = featured[activeIndex].title;
-          subEl.textContent   = featured[activeIndex].sub;
-          titleEl.style.opacity = subEl.style.opacity = '1';
-          captionLock = false;
-          showDualBubble(featured[activeIndex].reactionBubu, featured[activeIndex].reactionDudu);
-          bounceAllChars();
-        }, 320);
+      let tx, ty, trot, talpha;
+      if (isActive) {
+        tx = 0.0; ty = 0.02; trot = 0; talpha = 1.0;
+      } else {
+        tx     = home.hx + fx;
+        ty     = home.hy + fy;
+        trot   = home.rot + Math.sin(t * 0.38 + s.floatPhase) * 2.8;
+        talpha = 0.55;
       }
 
-      ctx.fillStyle = '#040203';
-      ctx.fillRect(0, 0, W, H);
+      const spd = isActive ? 0.072 : 0.038;
+      s.x      += (tx     - s.x)     * spd;
+      s.y      += (ty     - s.y)     * spd;
+      s.rot    += (trot   - s.rot)   * spd;
+      s.alpha  += (talpha - s.alpha) * spd;
 
-      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.75);
-      grd.addColorStop(0, 'rgba(44,0,14,0.50)');
-      grd.addColorStop(1, 'transparent');
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, W, H);
+      const img = featImgs[i];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
 
-      // Background stars twinkle
-      for (let i = 0; i < 140; i++) {
-        const tw = 0.07 + 0.07 * Math.sin(t * 2.3 + i * 0.61);
-        ctx.fillStyle = `rgba(255,210,225,${tw})`;
-        ctx.beginPath();
-        ctx.arc((i * 193.7) % W, (i * 127.3 + 40) % H, 0.25 + (i % 4) * 0.18, 0, Math.PI * 2);
+      let cardW, cardH;
+      if (isActive) {
+        cardW = Math.min(W * 0.42, 400);
+        cardH = cardW * 0.76;
+      } else {
+        const depthF = 0.75 / (home.wz * 0.38);
+        cardW = Math.min(200 * depthF, W * 0.27);
+        cardH = cardW * 0.76;
+      }
+
+      const sx  = cx + s.x * W;
+      const sy  = cy + s.y * H;
+      const brd = Math.max(2, cardW * 0.042);
+      const bot = Math.max(4, cardW * 0.17);
+
+      const fullW = cardW + brd * 2;
+      const fullH = cardH + brd + bot;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.05, s.alpha);
+      ctx.translate(sx, sy);
+      ctx.rotate(s.rot * Math.PI / 180);
+
+      ctx.shadowColor = isActive ? 'rgba(244, 63, 94, 0.65)' : 'rgba(244, 63, 94, 0.15)';
+      ctx.shadowBlur  = isActive ? cardW * 0.45 : cardW * 0.15;
+
+      const cardGrd = ctx.createLinearGradient(-fullW/2, -fullH/2, fullW/2, fullH/2);
+      cardGrd.addColorStop(0, '#ffffff');
+      cardGrd.addColorStop(1, '#fff5f6');
+      ctx.fillStyle = cardGrd;
+
+      const activeRadius = isActive ? 16 : 10;
+      drawRoundedRect(ctx, -fullW/2, -cardH/2 - brd, fullW, fullH, activeRadius);
+      ctx.fill();
+
+      ctx.save();
+      ctx.shadowBlur = 0; 
+      drawRoundedRect(ctx, -cardW/2, -cardH/2, cardW, cardH, isActive ? 10 : 6);
+      ctx.clip();
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+      
+      const vignette = ctx.createRadialGradient(0, 0, cardW * 0.3, 0, 0, cardW * 0.6);
+      vignette.addColorStop(0, 'rgba(0,0,0,0)');
+      vignette.addColorStop(1, 'rgba(0,0,0,0.25)');
+      ctx.fillStyle = vignette;
+      ctx.fillRect(-cardW/2, -cardH/2, cardW, cardH);
+      ctx.restore();
+
+      ctx.save();
+      ctx.shadowBlur = 0; 
+      
+      s.hearts.forEach(h => {
+        let hx = 0, hy = 0;
+        const offsetRangeX = fullW / 2;
+        const offsetRangeY = fullH / 2;
+        const baselineY = (-cardH / 2 - brd) + fullH / 2;
+
+        if (h.side === 0) { 
+          hx = h.posFactor * fullW;
+          hy = -cardH / 2 - brd;
+        } else if (h.side === 1) { 
+          hx = fullW / 2;
+          hy = baselineY + h.posFactor * fullH;
+        } else if (h.side === 2) { 
+          hx = h.posFactor * fullW;
+          hy = (-cardH / 2 - brd) + fullH;
+        } else { 
+          hx = -fullW / 2;
+          hy = baselineY + h.posFactor * fullH;
+        }
+
+        const heartSize = cardW * h.sizeFactor * (isActive ? 1.2 : 1.0);
+        ctx.fillStyle = h.color;
+        
+        ctx.save();
+        ctx.translate(hx, hy);
+        ctx.rotate(Math.sin(t * 2 + h.posFactor * 10) * 0.15);
+        drawVectorHeart(ctx, 0, -heartSize/2, heartSize);
         ctx.fill();
+        ctx.restore();
+      });
+      ctx.restore();
+
+      if (isActive) {
+        ctx.shadowBlur = 0;
+        ctx.fillStyle    = '#4c111e';
+        const fs         = Math.max(13, cardW * 0.058);
+        ctx.font         = `italic 600 ${fs}px 'Cormorant Garamond', serif`;
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(featured[i].title, 0, cardH/2 + bot * 0.50);
       }
 
-      // Background decorative cells path
-      [...bgStars].sort((a, b) => b.wz - a.wz).forEach(s => {
-        const img = bgImgs[s.imgIndex];
-        if (!img || !img.complete || img.naturalWidth === 0) return;
+      ctx.restore();
+    });
+  })();
+}
 
-        const fx = Math.cos(t * s.floatSpeed * 0.55 + s.floatPhase) * 0.035;
-        const fy = Math.sin(t * s.floatSpeed * 0.70 + s.floatPhase + 1.0) * 0.030;
-        const fr = Math.sin(t * s.floatSpeed * 0.40 + s.floatPhase) * 1.2;
-
-        s.x      += (s.hx + fx - s.x)      * 0.08;
-        s.y      += (s.hy + fy - s.y)      * 0.08;
-        s.curRot += (s.rot + fr - s.curRot) * 0.08;
-        s.curAlpha += (1 - s.curAlpha) * 0.012;
-
-        const depthF     = 0.62 / (s.wz * 0.34);
-        const cardW      = Math.min(180 * depthF, W * 0.22);
-        const cardH      = cardW * 0.76;
-        const finalAlpha = Math.max(0.04, 0.55 - s.wz * 0.10) * 0.45 * s.curAlpha;
-        const brd        = Math.max(1.2, cardW * 0.04);
-        const bot        = Math.max(2,   cardW * 0.15);
-
-        ctx.save();
-        ctx.globalAlpha = Math.max(0.03, Math.min(0.5, finalAlpha));
-        ctx.translate(cx + s.x * W * 0.92, cy + s.y * H * 0.88);
-        ctx.rotate(s.curRot * Math.PI / 180);
-        ctx.shadowColor = 'rgba(244,63,94,0.08)';
-        ctx.shadowBlur  = cardW * 0.12;
-        ctx.fillStyle   = '#ffffff';
-        ctx.fillRect(-cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot);
-        ctx.shadowBlur  = 0;
-        ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
-        ctx.restore();
-      });
-
-      // Featured structural photo cells
-      const drawOrder = featured.map((_, i) => i).filter(i => i !== activeIndex);
-      drawOrder.push(activeIndex);
-
-      drawOrder.forEach(i => {
-        const s        = featStars[i];
-        const home     = featHomes[i];
-        const isActive = (i === activeIndex);
-
-        const fx = Math.cos(t * 0.55 + s.floatPhase) * 0.016;
-        const fy = Math.sin(t * 0.70 + s.floatPhase + 1.3) * 0.012;
-
-        const tx     = isActive ? 0.0     : home.hx + fx;
-        const ty     = isActive ? 0.02    : home.hy + fy;
-        const trot   = isActive ? 0       : home.rot + Math.sin(t * 0.38 + s.floatPhase) * 2.8;
-        const talpha = isActive ? 1.0     : 0.55;
-
-        const spd = isActive ? 0.072 : 0.038;
-        s.x      += (tx     - s.x)     * spd;
-        s.y      += (ty     - s.y)     * spd;
-        s.rot    += (trot   - s.rot)   * spd;
-        s.alpha  += (talpha - s.alpha) * spd;
-
-        const img = featImgs[i];
-        if (!img || !img.complete || img.naturalWidth === 0) return;
-
-        let cardW;
-        if (isActive) {
-          cardW = Math.min(W * 0.42, 400);
-        } else {
-          cardW = Math.min(200 * (0.75 / (home.wz * 0.38)), W * 0.27);
-        }
-        const cardH = cardW * 0.76;
-        const brd   = Math.max(2, cardW * 0.042);
-        const bot   = Math.max(4, cardW * 0.17);
-
-        ctx.save();
-        ctx.globalAlpha = Math.max(0.05, s.alpha);
-        ctx.translate(cx + s.x * W, cy + s.y * H);
-        ctx.rotate(s.rot * Math.PI / 180);
-        ctx.shadowColor = isActive ? 'rgba(244,63,94,0.70)' : 'rgba(244,63,94,0.15)';
-        ctx.shadowBlur  = isActive ? cardW * 0.55 : cardW * 0.18;
-        ctx.fillStyle   = '#ffffff';
-        ctx.fillRect(-cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot);
-        ctx.shadowBlur  = 0;
-        ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
-        if (isActive) {
-          ctx.fillStyle    = '#3d1a22';
-          ctx.font         = `italic ${Math.max(13, cardW * 0.058)}px 'Cormorant Garamond', serif`;
-          ctx.textAlign    = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(featured[i].title, 0, cardH / 2 + bot * 0.50);
-        }
-        ctx.restore();
-      });
-    })();
-  }
-
-  // ── SCROLL TRRIGERS INITIALIZATION ────────────────────────────────────────
+  // ── SCROLL TRIGGERS INITIALIZATION ──
 
   function initScrollAnimations() {
     document.querySelectorAll('#proposal .fade-up').forEach((el, i) => {
@@ -1673,7 +1851,7 @@ function tick() {
     });
   }
 
-  // ── TYPEWRITER CORE ───────────────────────────────────────────────────────
+  // ── TYPEWRITER CORE ──
 
   function initLetter() {
     const text = "Every day with you has been its own kind of magic. The laughter, the late nights, the quiet moments where we said everything without a single word. You showed me what it means to be truly seen, and I am so grateful it's you. Two years ago you walked into my life and rearranged everything. Thank you for choosing me, for loving me through all my edges, and for making ordinary days feel extraordinary. Here's to every single year that follows.";
@@ -1702,7 +1880,7 @@ function tick() {
     });
   }
 
-  // ── DUAL SPEECH DIALOG IMPLEMENTATION ─────────────────────────────────────
+  // ── DUAL SPEECH DIALOG IMPLEMENTATION ──
 
   let timerRight, timerLeft;
 
@@ -1730,6 +1908,7 @@ function tick() {
     }
   }
 
+  // Adjusted toggle settings to match global parameters cleanly
   function bounceAllChars() {
     const right = document.getElementById('char-img-right');
     const left  = document.getElementById('char-img-left');
@@ -1741,22 +1920,21 @@ function tick() {
     left.classList.add('char-bounce');
   }
 
-  // 🌟 ENHANCED WITH INTRO STATE PROTECTION SYSTEM
   document.getElementById('char-img-right').addEventListener('click', () => {
-    if (isIntroPlaying || diff > 0) return; // Completely ignores clicks during cutscene intro
+    if (isIntroPlaying) return; 
     const msgs = ["I love you both so much! 💖", "Two years! That's amazing! 🥳", "You two are the cutest! 🥰", "Besties forever!! ✨"];
     showDualBubble(msgs[Math.floor(Math.random() * msgs.length)], "Hey, don't leave me out! Me too! 🥺");
     bounceAllChars();
   });
 
   document.getElementById('char-img-left').addEventListener('click', () => {
-    if (isIntroPlaying || diff > 0) return; // Completely ignores clicks during cutscene intro
+    if (isIntroPlaying) return; 
     const msgs = ["Always holding down the left wing! 😎", "Look at all these memories! 📸", "She is going to love this layout completely! 🥺", "Spin that slot machine section below! 🎰"];
     showDualBubble("He thinks he's so cool! 🙄💕", msgs[Math.floor(Math.random() * msgs.length)]);
     bounceAllChars();
   });
 
-  // ── SLOT MACHINE REELS ENGINE ─────────────────────────────────────────────
+  // ── SLOT MACHINE REELS ENGINE ──
 
   function initSlotMachine() {
     const reelData = [
@@ -1892,6 +2070,9 @@ function tick() {
       });
     });
   }
+
+  // Run initialization setup immediately on script launch loops
+  initBgCanvas();
 </script>
 </body>
 </html>
