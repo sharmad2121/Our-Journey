@@ -1618,7 +1618,7 @@ function initTunnel() {
         
         showDualBubble(featured[activeIndex].reactionBubu, featured[activeIndex].reactionDudu);
         bounceAllChars();
-      }, 320);
+      }, 1020);
     }
 
     ctx.fillStyle = '#040203';
@@ -1891,12 +1891,12 @@ function initTunnel() {
     bRight.textContent = msgRight;
     bRight.classList.add('visible');
     clearTimeout(timerRight);
-    timerRight = setTimeout(() => bRight.classList.remove('visible'), 5000);
+    timerRight = setTimeout(() => bRight.classList.remove('visible'), 10000);
 
     bLeft.textContent = msgLeft;
     bLeft.classList.add('visible');
     clearTimeout(timerLeft);
-    timerLeft = setTimeout(() => bLeft.classList.remove('visible'), 5000);
+    timerLeft = setTimeout(() => bLeft.classList.remove('visible'), 10000);
   }
 
   function toggleExplicitBubble(target, msg, show) {
@@ -2076,5 +2076,3 @@ function initTunnel() {
 </script>
 </body>
 </html>
-
-open-btn
