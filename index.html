@@ -900,7 +900,7 @@
 
   // ── LIFECYCLE TARGETS ─────────────────────────────────────────────────────
 
-  const anniversary = new Date("June 2, 2026 00:00:00").getTime();
+  const anniversary = new Date("May 2, 2026 00:00:00").getTime();
   let timeIsUp = false;
   
   // 🌟 CLICK GUARD STATE FLAG: Keeps the intro immune to user click overrides
@@ -1062,7 +1062,7 @@ function tick() {
         document.getElementById('char-guide-left').style.zIndex = '1010';
         document.getElementById('char-guide-right').style.zIndex = '1000';
 
-        showExplicitIntroBubble('left', 'Yes! The wait is over, let me open it right now! 🔓🎉');
+        showExplicitIntroBubble('left', 'Yes! The wait is over 🔓🎉');
         bounceSpecificChar('left');
       }, "+=2.2")
       .add(() => {
@@ -1074,7 +1074,7 @@ function tick() {
         document.getElementById('char-guide-right').style.zIndex = '1000';
 
         gsap.to('#char-guide-left', {
-          top: '70%', bottom: '1.5rem',
+          top: 'auto', bottom: '1.5rem',
           right: 'auto', left: '1.5rem',
           xPercent: 0, yPercent: 0,
           duration: 1.4,
@@ -1093,7 +1093,7 @@ function tick() {
             const openBtn = document.getElementById('open-btn');
             openBtn.removeAttribute('disabled');
             openBtn.textContent = "Open Your Gift 💖";
-            showDualBubble("Hi! 💖 Open your gift!", "Waiting... 👀");
+            showDualBubble("Opening 🥹...", "Now you can your gift!");
           }
         });
         gsap.to('#char-img-right', { width: '90px', height: '90px', duration: 1.4, ease: 'power3.inOut' });
