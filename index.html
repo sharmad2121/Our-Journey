@@ -950,7 +950,7 @@
 
   // ── LIFECYCLE COUNTDOWN CLOCK ENGINE ──────────────────────────────────────
 
-  function tick() {
+function tick() {
     const diff = anniversary - Date.now();
     const pad  = n => String(Math.max(0, n)).padStart(2, '0');
     
@@ -959,7 +959,8 @@
     document.getElementById('minutes').textContent = pad(Math.floor(diff % 36e5 / 6e4));
     document.getElementById('seconds').textContent = pad(Math.floor(diff % 6e4 / 1e3));
 
-    if (diff <= 0 && !timeIsUp) {
+    // 🌟 THE FIX: Only let the clock enable the button if the intro is completely done!
+    if (diff <= 0 && !timeIsUp && !isIntroPlaying) {
       timeIsUp = true;
       const openBtn = document.getElementById('open-btn');
       openBtn.removeAttribute('disabled');
@@ -1012,7 +1013,7 @@
       bounceSpecificChar('left');
     }, "+=2.0")
     .add(() => {
-      showExplicitIntroBubble('right', 'oh really , please show me 🥺✨');
+      showExplicitIntroBubble('right', 'oh really , please show me 🥹✨');
       bounceSpecificChar('right');
     }, "+=2.0");
 
@@ -1057,8 +1058,13 @@
           duration: 1.4,
           ease: 'power3.inOut',
           onComplete: () => {
-            // Intro is completely done, unlock avatar clicking systems safely!
             isIntroPlaying = false; 
+            
+            // 🌟 THE FIX: Unlock the button here safely after they have collapsed down!
+            const openBtn = document.getElementById('open-btn');
+            openBtn.removeAttribute('disabled');
+            openBtn.textContent = "Open Your Gift 💖";
+
             showDualBubble("Hi! 💖 Open your gift!", "Waiting... 👀");
           }
         });
