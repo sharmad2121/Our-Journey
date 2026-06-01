@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Journey 💖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose: #f43f5e;
+      --rose-light: #fda4af;
+      --rose-dark: #881337;
+      --cream: #fff1f2;
+      --ink: #0f0a0b;
+      --surface: #1a0a0e;
+      --muted: #9f8a8d;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: #080407;
+      color: #f0e6e8;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── GLOBAL BG CANVAS ── */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor {
+      position: fixed; width: 24px; height: 24px;
+      pointer-events: none; z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, opacity .2s;
+      mix-blend-mode: screen;
+      background: none;
+    }
+    #cursor svg { width: 100%; height: 100%; fill: var(--rose); filter: drop-shadow(0 0 6px rgba(244,63,94,.7)); }
+    #cursor.hovered { width: 36px; height: 36px; }
+
+    /* ── COVER ── */
+    #cover {
+      height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(59,0,23,0.85) 0%, rgba(8,4,7,0.92) 70%);
+      text-align: center; padding: 2rem;
+      position: relative; overflow: hidden;
+      z-index: 1;
+    }
+    #cover::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(244,63,94,.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridShimmer 8s ease-in-out infinite;
+      z-index: 0;
+    }
+    #cover > * { position: relative; z-index: 1; }
+    @keyframes gridShimmer {
+      0%,100% { opacity: .4; } 50% { opacity: 1; }
+    }
+    .cover-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: -.02em;
+      line-height: 1;
+      opacity: 0; transform: translateY(40px);
+    }
+    .cover-sub {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: var(--rose-light); margin-top: 1rem;
+      opacity: 0; transform: translateY(20px);
+    }
+    .countdown-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 12px; margin: 2rem auto; max-width: 360px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .countdown-box {
+      background: rgba(244,63,94,.08);
+      border: 1px solid rgba(244,63,94,.2);
+      border-radius: 12px; padding: 14px 8px;
+      backdrop-filter: blur(12px);
+    }
+    .countdown-box span.num {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 300;
+      color: var(--rose-light);
+    }
+    .countdown-box span.lbl {
+      font-size: 10px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .open-btn {
+      font-family: var(--font-sans); font-size: 1rem; font-weight: 500;
+      padding: 14px 40px; border-radius: 100px;
+      background: linear-gradient(135deg, var(--rose), #db2777);
+      color: #fff; border: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 0 40px rgba(244,63,94,.3);
+      opacity: 0; transform: translateY(20px);
+    }
+    .open-btn:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 0 60px rgba(244,63,94,.5); }
+    .open-btn:disabled { opacity: .5 !important; cursor: not-allowed; }
+
+    /* ── MAIN (hidden until unlocked) ── */
+    #main { display: none; }
+
+    /* ── PROPOSAL ── */
+    #proposal {
+      min-height: 100svh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(to bottom, rgba(8,4,7,0.88), rgba(26,5,8,0.90));
+      padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden;
+      z-index: 1;
+    }
+    .proposal-bg-text {
+      position: absolute; font-family: var(--font-serif);
+      font-size: clamp(10rem, 40vw, 28rem); font-weight: 600;
+      color: rgba(255, 255, 255, 0.08); letter-spacing: -.05em;
+      white-space: nowrap; pointer-events: none; user-select: none;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+    }
+    .proposal-inner { max-width: 700px; position: relative; z-index: 2; }
+    .tag {
+      font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--rose); font-weight: 500;
+    }
+    .proposal-h {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300; color: var(--cream);
+      margin: 1rem 0; line-height: 1.2;
+    }
+    .divider {
+      width: 80px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--rose), transparent);
+      margin: 1.5rem auto;
+    }
+    .proposal-quote {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: #d4b0b8; line-height: 1.7;
+    }
+
+    /* ── STARFIELD SECTION ── */
+    #tunnel-section {
+      position: relative;
+      background: #040203;
+      z-index: 1;
+    }
+    #tunnel-sticky {
+      position: sticky; top: 0;
+      width: 100%; height: 100svh; overflow: hidden;
+    }
+    #tunnel-canvas {
+      width: 100%; height: 100%;
+      display: block;
+    }
+    #tunnel-overlay {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, transparent 20%, rgba(4,2,3,.55) 100%);
+    }
+    #tunnel-caption {
+      position: absolute; top: 2.5rem; left: 50%; transform: translateX(-50%);
+      text-align: center; pointer-events: none;
+      transition: opacity .3s;
+      white-space: nowrap;
+    }
+    #tunnel-caption h3 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 400; color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,.9);
+    }
+    #tunnel-caption p {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--rose-light); margin-top: .3rem; font-size: 1rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,.9);
+    }
+    #tunnel-spacer { height: 700vh; }
+
+    /* ── ANNIVERSARY CLIMAX ── */
+    #climax {
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(59,0,23,0.88), rgba(8,4,7,0.92));
+      padding: 4rem 2rem; text-align: center;
+      position: relative; overflow: hidden;
+      z-index: 1;
+    }
+    .polaroid-big {
+      width: min(340px, 85vw);
+      background: #fff; padding: 12px 12px 52px;
+      box-shadow: 0 40px 100px rgba(0,0,0,.8), 0 0 80px rgba(244,63,94,.2);
+      transform: rotate(-2deg);
+      transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+      cursor: pointer; position: relative; z-index: 2;
+    }
+    .polaroid-big:hover { transform: rotate(0deg) scale(1.03); }
+    .polaroid-big img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #1a0508; }
+    .polaroid-big .caption {
+      font-family: var(--font-serif); font-style: italic;
+      color: #3d1a22; text-align: center;
+      font-size: 1.1rem; margin-top: 8px;
+    }
+    .climax-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 300; color: var(--cream);
+      margin-top: 2.5rem;
+    }
+    .climax-sub {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--rose-light); font-size: 1.2rem; margin-top: .5rem;
+    }
+
+    /* ── SHARED SECTION HEADING ── */
+    .sec-head { text-align: center; margin-bottom: 3rem; }
+    .sec-head h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 300; color: var(--cream);
+    }
+    .sec-head p {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--muted); margin-top: .5rem;
+    }
+
+    /* ── FILM STRIP ── */
+    #filmstrip-section {
+      padding: 5rem 0;
+      background: linear-gradient(to bottom, rgba(8,4,7,0.92), rgba(10,2,6,0.95));
+      position: relative; z-index: 1; overflow: hidden;
+    }
+    #filmstrip-section .sec-head { padding: 0 2rem; }
+    .filmstrip-track {
+      display: flex; align-items: center;
+      gap: 0; cursor: grab; user-select: none;
+      padding: 0 4vw;
+      overflow: visible;
+    }
+    .filmstrip-track:active { cursor: grabbing; }
+    .film-frame {
+      flex-shrink: 0;
+      width: clamp(200px, 28vw, 320px);
+      background: #111;
+      border-left: 14px solid #111;
+      border-right: 14px solid #111;
+      position: relative;
+    }
+    /* sprocket holes top */
+    .film-frame::before,
+    .film-frame::after {
+      content: '';
+      position: absolute; left: -14px; right: -14px;
+      height: 22px;
+      background: repeating-linear-gradient(
+        to right,
+        #111 0px, #111 6px,
+        #080407 6px, #080407 22px,
+        #111 22px, #111 28px
+      );
+      z-index: 1;
+    }
+    .film-frame::before { top: 0; }
+    .film-frame::after  { bottom: 0; }
+    .film-img-wrap {
+      margin: 22px 0;
+      overflow: hidden;
+    }
+    .film-img-wrap img {
+      width: 100%; aspect-ratio: 3/2; object-fit: cover;
+      display: block;
+      filter: sepia(.15) contrast(1.05);
+      transition: filter .4s;
+    }
+    .film-frame:hover .film-img-wrap img { filter: sepia(0) contrast(1.1); }
+    .film-caption {
+      font-family: var(--font-serif); font-style: italic;
+      color: #aaa; text-align: center;
+      font-size: .85rem; padding: 6px 8px 14px;
+      background: #111;
+    }
+    .filmstrip-hint {
+      text-align: center; margin-top: 1.5rem;
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+      color: rgba(244,63,94,.5);
+    }
+
+    /* ── REASONS PETALS ── */
+    #petals-section {
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(to bottom, rgba(10,2,6,0.95), rgba(26,5,8,0.92));
+      padding: 5rem 2rem; position: relative; z-index: 1;
+    }
+    .flower-wrap {
+      position: relative;
+      width: clamp(260px, 60vw, 480px);
+      aspect-ratio: 1;
+      margin: 2rem auto;
+    }
+    .petal {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 46%; height: 52%;
+      transform-origin: 50% 100%;
+      cursor: pointer;
+    }
+    .petal-shape {
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 50% 30%, rgba(253,164,175,.9), rgba(244,63,94,.7));
+      border-radius: 50% 50% 30% 30%;
+      transform: translateX(-50%) translateY(-100%);
+      transition: transform .35s cubic-bezier(.34,1.4,.64,1), filter .3s;
+      box-shadow: 0 0 20px rgba(244,63,94,.2);
+    }
+    .petal:hover .petal-shape {
+      transform: translateX(-50%) translateY(-115%) scale(1.08);
+      filter: brightness(1.2);
+    }
+    .petal-label {
+      position: absolute;
+      top: 30%; left: 50%;
+      transform: translateX(-50%) translateY(-100%) rotate(var(--rot-inv));
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(.65rem, 1.5vw, .9rem);
+      color: #fff; text-align: center;
+      width: 90%; line-height: 1.2;
+      pointer-events: none; white-space: nowrap;
+      text-shadow: 0 1px 4px rgba(0,0,0,.4);
+    }
+    .flower-center {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 22%; aspect-ratio: 1;
+      background: radial-gradient(circle, #fda4af, #f43f5e);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 30px rgba(244,63,94,.5);
+      cursor: pointer; z-index: 10;
+      transition: transform .3s;
+    }
+    .flower-center:hover { transform: translate(-50%,-50%) scale(1.1); }
+    .flower-center span {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+    }
+    /* petal tooltip */
+    .petal-tooltip {
+      position: fixed; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(26,5,8,.95);
+      border: 1px solid rgba(244,63,94,.35);
+      border-radius: 16px; padding: 14px 24px;
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--rose-light); max-width: min(480px, 90vw);
+      text-align: center; line-height: 1.6;
+      opacity: 0; transition: opacity .4s, transform .4s;
+      pointer-events: none; z-index: 200;
+    }
+    .petal-tooltip.show {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── US IN NUMBERS ── */
+    #numbers-section {
+      padding: 6rem 2rem;
+      background: linear-gradient(to bottom, rgba(8,4,7,0.92), rgba(20,4,10,0.95));
+      position: relative; z-index: 1;
+    }
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem; max-width: 900px; margin: 0 auto;
+    }
+    .number-card {
+      background: rgba(244,63,94,.05);
+      border: 1px solid rgba(244,63,94,.18);
+      border-radius: 20px; padding: 2rem 1.5rem;
+      text-align: center;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .number-card:hover {
+      border-color: rgba(244,63,94,.4);
+      box-shadow: 0 0 30px rgba(244,63,94,.1);
+    }
+    .number-card .num-val {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 300; color: var(--rose-light);
+      display: block; line-height: 1;
+    }
+    .number-card .num-label {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--muted); margin-top: .5rem; font-size: 1rem;
+    }
+
+    /* ── KARAOKE ── */
+    #karaoke-section {
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(to bottom, rgba(20,4,10,0.95), rgba(59,0,23,0.90));
+      padding: 5rem 2rem; position: relative; z-index: 1;
+    }
+    .karaoke-wrap { max-width: 640px; width: 100%; }
+    .karaoke-player {
+      background: rgba(244,63,94,.05);
+      border: 1px solid rgba(244,63,94,.2);
+      border-radius: 24px; padding: 2rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .karaoke-song-name {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 1.1rem; color: var(--muted);
+      text-align: center; margin-bottom: 1.5rem;
+      letter-spacing: .05em;
+    }
+    .karaoke-progress-wrap {
+      background: rgba(255,255,255,.06);
+      border-radius: 100px; height: 4px;
+      margin-bottom: .6rem; overflow: hidden;
+    }
+    .karaoke-progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(to right, var(--rose), #fda4af);
+      border-radius: 100px;
+      transition: width .5s linear;
+    }
+    .karaoke-time {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--muted); margin-bottom: 1.2rem;
+      letter-spacing: .05em;
+    }
+    .karaoke-controls {
+      display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+    }
+    .k-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--rose-light); font-size: 1.4rem;
+      transition: transform .2s, color .2s;
+      padding: 8px;
+    }
+    .k-btn:hover { transform: scale(1.2); color: var(--rose); }
+    .k-btn.play-btn {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), #db2777);
+      color: #fff; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 24px rgba(244,63,94,.4);
+    }
+    .k-btn.play-btn:hover { transform: scale(1.1); }
+    .karaoke-lines {
+      display: flex; flex-direction: column; gap: .8rem;
+    }
+    .k-line {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(1rem, 2.8vw, 1.3rem);
+      color: rgba(255,255,255,.2);
+      text-align: center; line-height: 1.5;
+      transition: color .6s, text-shadow .6s, transform .4s;
+      transform: scale(.95);
+    }
+    .k-line.active {
+      color: var(--cream);
+      text-shadow: 0 0 30px rgba(244,63,94,.6);
+      transform: scale(1.05);
+    }
+    .k-line.past {
+      color: rgba(253,164,175,.45);
+      transform: scale(1);
+    }
+
+    /* ── LETTER SECTION ── */
+    #letter-section {
+      min-height: 100svh; display: flex; align-items: center; justify-content: center;
+      background: rgba(8,4,7,0.90); padding: 5rem 2rem;
+      position: relative; z-index: 1;
+    }
+    .letter-wrap {
+      max-width: 560px; text-align: center;
+    }
+    .letter-icon { font-size: 3rem; display: block; margin-bottom: 1.5rem; }
+    .letter-title {
+      font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300;
+      color: var(--cream); margin-bottom: 1.5rem;
+    }
+    .letter-body {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 1.15rem; color: #c4a0a8; line-height: 1.9;
+    }
+    #typewriter-text { min-height: 180px; }
+    .cursor-blink {
+      display: inline-block; width: 2px; height: 1.2em;
+      background: var(--rose); margin-left: 2px; vertical-align: text-bottom;
+      animation: blink .7s infinite;
+    }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+    .letter-sign {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--rose-light); font-size: 1.3rem; margin-top: 1.5rem;
+      opacity: 0;
+    }
+
+    /* ── BUBUCHAN CHARACTER ── */
+    #char-guide {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      z-index: 1000; display: flex; flex-direction: column;
+      align-items: flex-end; pointer-events: none;
+    }
+    #char-bubble {
+      background: #fff; color: #2d0a14;
+      padding: 10px 14px; border-radius: 16px 16px 4px 16px;
+      font-size: 13px; font-family: var(--font-sans); font-weight: 500;
+      box-shadow: 0 8px 30px rgba(0,0,0,.3);
+      max-width: 200px; margin-bottom: 8px;
+      opacity: 0; transform: scale(.8) translateY(8px);
+      transition: opacity .3s, transform .3s;
+      line-height: 1.4; pointer-events: auto;
+    }
+    #char-bubble.visible {
+      opacity: 1; transform: scale(1) translateY(0);
+    }
+    #char-img {
+      width: 90px; height: 90px; object-fit: contain;
+      pointer-events: auto; cursor: pointer;
+      animation: idle 3s ease-in-out infinite;
+      filter: drop-shadow(0 8px 20px rgba(244,63,94,.3));
+      transition: transform .15s;
+    }
+    #char-img:hover { transform: scale(1.1); }
+    #char-img:active { transform: scale(.92); }
+    @keyframes idle {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .char-bounce {
+      animation: bounce .4s ease-out !important;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      30% { transform: translateY(-20px) scale(1.1); }
+      60% { transform: translateY(4px) scale(.97); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* ── HEART FALL ── */
+    @keyframes heartFall {
+      0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 0.9; }
+      20%  { opacity: 1; }
+      80%  { opacity: 0.8; }
+      100% { transform: translateY(110vh) rotate(360deg) scale(0.6); opacity: 0; }
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: linear-gradient(to right, var(--rose), #db2777);
+      z-index: 9999; transition: width .1s linear;
+      box-shadow: 0 0 8px var(--rose);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up { opacity: 0; transform: translateY(30px); }
+
+    /* ── SLOT MACHINE ── */
+    #slot-section {
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(to bottom, rgba(8,4,7,0.92), rgba(26,0,12,0.95));
+      padding: 5rem 2rem; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .slot-label {
+      margin-bottom: 2.5rem;
+    }
+    .slot-label h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 300; color: var(--cream);
+    }
+    .slot-label p {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--muted); margin-top: .5rem; font-size: 1rem;
+    }
+    .slot-machine {
+      background: linear-gradient(145deg, #1a0508, #2d0a14);
+      border: 1px solid rgba(244,63,94,.25);
+      border-radius: 24px;
+      padding: 2.5rem 2rem 2rem;
+      width: min(520px, 92vw);
+      box-shadow: 0 40px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(244,63,94,.15), 0 0 60px rgba(244,63,94,.08);
+      position: relative;
+    }
+    /* decorative top lights */
+    .slot-lights {
+      display: flex; justify-content: center; gap: 10px;
+      margin-bottom: 1.8rem;
+    }
+    .slot-light {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 8px var(--rose);
+      animation: lightPulse 1.4s ease-in-out infinite;
+    }
+    .slot-light:nth-child(2) { animation-delay: .2s; background: #fda4af; box-shadow: 0 0 8px #fda4af; }
+    .slot-light:nth-child(3) { animation-delay: .4s; }
+    .slot-light:nth-child(4) { animation-delay: .6s; background: #fda4af; box-shadow: 0 0 8px #fda4af; }
+    .slot-light:nth-child(5) { animation-delay: .8s; }
+    @keyframes lightPulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .3; transform: scale(.7); }
+    }
+    /* the three reels */
+    .slot-reels {
+      display: flex; gap: 10px;
+      background: #080407;
+      border-radius: 14px;
+      padding: 6px;
+      border: 1px solid rgba(244,63,94,.2);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    /* shine line across all reels */
+    .slot-reels::before {
+      content: '';
+      position: absolute;
+      left: 6px; right: 6px;
+      top: 50%; transform: translateY(-50%);
+      height: 58px;
+      background: rgba(244,63,94,.07);
+      border-top: 1px solid rgba(244,63,94,.25);
+      border-bottom: 1px solid rgba(244,63,94,.25);
+      pointer-events: none; z-index: 1; border-radius: 4px;
+    }
+    .slot-reel {
+      flex: 1;
+      height: 58px;
+      overflow: hidden;
+      border-radius: 10px;
+      position: relative;
+    }
+    .slot-reel-inner {
+      display: flex; flex-direction: column;
+      transition: transform 0s;
+    }
+    .slot-reel-inner.spinning {
+      transition: transform 0.08s linear;
+    }
+    .slot-item {
+      height: 58px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      flex-shrink: 0;
+      user-select: none;
+    }
+    /* result display */
+    .slot-result {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--rose-light);
+      line-height: 1.6;
+      min-height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 .5rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .5s ease, transform .5s ease;
+      margin-bottom: 1.5rem;
+    }
+    .slot-result.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    /* spin button */
+    .slot-btn {
+      font-family: var(--font-sans); font-weight: 500;
+      font-size: 1rem; letter-spacing: .04em;
+      padding: 14px 48px; border-radius: 100px;
+      background: linear-gradient(135deg, var(--rose), #db2777);
+      color: #fff; border: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+      box-shadow: 0 0 30px rgba(244,63,94,.35);
+    }
+    .slot-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.04); box-shadow: 0 0 50px rgba(244,63,94,.55); }
+    .slot-btn:active:not(:disabled) { transform: scale(.97); }
+    .slot-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .slot-count {
+      font-size: 12px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-top: 1rem;
+    }
+    /* win flash */
+    @keyframes winFlash {
+      0%,100% { box-shadow: 0 40px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(244,63,94,.15), 0 0 60px rgba(244,63,94,.08); }
+      50%      { box-shadow: 0 40px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(244,63,94,.4),  0 0 120px rgba(244,63,94,.5); }
+    }
+    .slot-machine.win-flash {
+      animation: winFlash .4s ease-in-out 3;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Global floating photo background — sits behind everything -->
+<canvas id="bg-canvas"></canvas>
+
+<div id="cursor">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+  </svg>
+</div>
+<div id="progress-bar" style="width:0%"></div>
+
+<!-- Character Guide -->
+<div id="char-guide">
+  <div id="char-bubble">Hi! 💖 Open your gift!</div>
+  <img id="char-img" src="bubuchan.png" alt="Bubuchan" />
+</div>
+
+<!-- ── COVER ── -->
+<section id="cover">
+  <h1 class="cover-title">Two Years of Us</h1>
+  <p class="cover-sub">June 2nd, 2024 → June 2nd, 2026</p>
+  <div class="countdown-grid">
+    <div class="countdown-box"><span class="num" id="days">00</span><span class="lbl">Days</span></div>
+    <div class="countdown-box"><span class="num" id="hours">00</span><span class="lbl">Hrs</span></div>
+    <div class="countdown-box"><span class="num" id="minutes">00</span><span class="lbl">Mins</span></div>
+    <div class="countdown-box"><span class="num" id="seconds">00</span><span class="lbl">Secs</span></div>
+  </div>
+  <button class="open-btn" id="open-btn">Open Your Gift 💖</button>
+</section>
+
+<!-- ── MAIN CONTENT ── -->
+<div id="main">
+
+  <!-- Proposal -->
+  <section id="proposal">
+    <div class="proposal-bg-text">02.06.24</div>
+    <div class="proposal-inner">
+      <span class="tag fade-up">The Moment Everything Changed</span>
+      <h2 class="proposal-h fade-up">No cameras. No flashing lights.<br/>Just you, me, and forever.</h2>
+      <div class="divider fade-up"></div>
+      <p class="proposal-quote fade-up">"On June 2nd, 2024, you asked me a question that completely rewrote my future. We don't need a single photograph to remember it — I can still feel my heart racing perfectly every single time I close my eyes. I love you."</p>
+    </div>
+  </section>
+
+  <!-- Tunnel -->
+  <section id="tunnel-section">
+    <div id="tunnel-sticky">
+      <canvas id="tunnel-canvas"></canvas>
+      <div id="tunnel-overlay"></div>
+      <div id="tunnel-caption">
+        <h3 id="t-title">Flying Through Our Memories</h3>
+        <p id="t-sub">Scroll to travel through time ✨</p>
+      </div>
+    </div>
+    <div id="tunnel-spacer"></div>
+  </section>
+
+  <!-- Climax -->
+  <section id="climax">
+    <div class="polaroid-big fade-up" id="climax-polaroid">
+      <img src="images/image6.jpg" alt="Our favorite photo" />
+      <p class="caption">Forever & Always 💕</p>
+    </div>
+    <h2 class="climax-title fade-up">Happy 2nd Anniversary! 💖</h2>
+    <p class="climax-sub fade-up">Two years. A thousand memories. A lifetime to go.</p>
+  </section>
+
+  <!-- Film Strip -->
+  <section id="filmstrip-section">
+    <div class="sec-head">
+      <h2 class="fade-up">Our Reel 🎞️</h2>
+      <p class="fade-up">Drag to scroll through our film</p>
+    </div>
+    <div class="filmstrip-track" id="filmstrip-track">
+      <!-- frames injected by JS -->
+    </div>
+    <p class="filmstrip-hint fade-up">← drag to explore →</p>
+  </section>
+
+  <!-- Us in Numbers -->
+  <section id="numbers-section">
+    <div class="sec-head">
+      <h2 class="fade-up">Us, in Numbers 💫</h2>
+      <p class="fade-up">Every digit tells a story</p>
+    </div>
+    <div class="numbers-grid" id="numbers-grid"></div>
+  </section>
+
+  <!-- Karaoke -->
+  <section id="karaoke-section">
+    <div class="sec-head">
+      <h2 class="fade-up">Our Song 🎶</h2>
+      <p class="fade-up">Press play and sing along</p>
+    </div>
+    <div class="karaoke-wrap fade-up">
+      <div class="karaoke-player">
+        <p class="karaoke-song-name">Tum Se Hi — Jab We Met</p>
+        <div class="karaoke-progress-wrap">
+          <div class="karaoke-progress-bar" id="k-progress"></div>
+        </div>
+        <div class="karaoke-time">
+          <span id="k-time-cur">0:00</span>
+          <span id="k-time-total">4:32</span>
+        </div>
+        <div class="karaoke-controls">
+          <button class="k-btn" id="k-restart" title="Restart">↺</button>
+          <button class="k-btn play-btn" id="k-play">▶</button>
+          <button class="k-btn" id="k-speed" title="Speed">1×</button>
+        </div>
+      </div>
+      <div class="karaoke-lines" id="karaoke-lines"></div>
+    </div>
+  </section>
+
+  <!-- Letter -->
+  <section id="letter-section">
+    <div class="letter-wrap">
+      <span class="letter-icon">✉️</span>
+      <h2 class="letter-title fade-up">A Letter, Just for You</h2>
+      <p class="letter-body">
+        <span id="typewriter-text"></span><span class="cursor-blink" id="blink"></span>
+      </p>
+      <p class="letter-sign" id="letter-sign">Yours completely, always. 💕</p>
+    </div>
+  </section>
+
+  <!-- Slot Machine -->
+  <section id="slot-section">
+    <div class="slot-label">
+      <h2 class="fade-up">Why I Love You</h2>
+      <p class="fade-up">Spin to discover a reason 🎰💖</p>
+    </div>
+    <div class="slot-machine" id="slot-machine">
+      <div class="slot-lights">
+        <div class="slot-light"></div>
+        <div class="slot-light"></div>
+        <div class="slot-light"></div>
+        <div class="slot-light"></div>
+        <div class="slot-light"></div>
+      </div>
+      <div class="slot-reels">
+        <div class="slot-reel" id="reel-0"><div class="slot-reel-inner" id="reel-inner-0"></div></div>
+        <div class="slot-reel" id="reel-1"><div class="slot-reel-inner" id="reel-inner-1"></div></div>
+        <div class="slot-reel" id="reel-2"><div class="slot-reel-inner" id="reel-inner-2"></div></div>
+      </div>
+      <div class="slot-result" id="slot-result"></div>
+      <button class="slot-btn" id="slot-btn">Spin 🎰</button>
+      <p class="slot-count" id="slot-count">Spun 0 times</p>
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── GALLERY DATA ──
+// featured: these photos come to the center on scroll, in order
+const featured = [
+  { src:'images/image1.jpg', title:"I'm the Best One",   sub:"~ Our First Real Trip Together",         reaction:"I remember how hard it was to get this shot! 😂💕", memory:"That trip when we got hopelessly lost but somehow that made it perfect. I wouldn't change a single wrong turn." },
+  { src:'images/image3.jpg', title:"A Child Was Born",   sub:"~ Discovering Absolute Happiness",       reaction:"Look at how young we look here! 🥺❤️",              memory:"We look like babies! But this was the moment I knew — you were my person. My favorite adventure." },
+  { src:'images/image6.jpg', title:"Pale Fire Rhythm",   sub:"~ Synchronizing Our Hearts",             reaction:"My absolute favorite memory. Period. 👩‍❤️‍👨",            memory:"This is my forever photo. I don't need to explain why. You already know." },
+  { src:'images/image4.jpg', title:"Joi's Billboard",    sub:"~ Long Distance is Hard",                reaction:"I miss hugging you so much when I see this. 💕",    memory:"Every mile between us made me love you more fiercely. Distance couldn't touch what we have." },
+  { src:'images/image7.jpg', title:"Sea Wall Drift",     sub:"~ Fighting Through Everything Together", reaction:"No matter what — I choose you. Every time. 🌊",      memory:"We've weathered every storm side by side. And I'd do it all again, a thousand times over, with you." },
+];
+
+const gallery = [
+  ...featured,
+  { src:'images/image2.jpg', title:"Meeting Deckard",  sub:"~ Vegas Date Night Stand-off", reaction:"You looked SO handsome that night! 🥰",  memory:"The night I realized I was completely, utterly, irreversibly in love with you. Vegas had nothing on us." },
+  { src:'images/image5.jpg', title:"Drowning Bottle",  sub:"~ K vs Luv Climax Date",       reaction:"We ate SO much after this scene! 🍕😂", memory:"That whole date was perfect. Sneaking snacks, sharing earphones, your laugh in the dark. Pure bliss." },
+  // Add more: { src:'images/image8.jpg', title:"...", sub:"...", reaction:"...", memory:"..." },
+];
+
+// ── HEART SHOWER ──
+function heartShower() {
+  const count  = 60;
+  const colors = ['#f43f5e','#fda4af','#fff1f2','#fb7185','#e11d48'];
+  for (let i = 0; i < count; i++) {
+    const heart    = document.createElement('div');
+    const size     = 14 + Math.random() * 22;
+    const startX   = Math.random() * 100;
+    const duration = 2.5 + Math.random() * 2;
+    const delay    = Math.random() * 2;
+    heart.innerHTML = '♥';
+    heart.style.cssText = `
+      position:fixed; left:${startX}vw; top:-40px;
+      font-size:${size}px; color:${colors[Math.floor(Math.random()*colors.length)]};
+      pointer-events:none; z-index:99998; user-select:none;
+      animation: heartFall ${duration}s ease-in ${delay}s forwards;
+      opacity:0.85;
+    `;
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), (duration + delay + 0.5) * 1000);
+  }
+}
+
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,img,.memory-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+});
+
+// ── SCROLL PROGRESS ──
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+});
+
+// ── COUNTDOWN ──
+const anniversary = new Date("June 2, 2026 00:00:00").getTime();
+function tick() {
+  const diff = anniversary - Date.now();
+  const pad  = n => String(Math.max(0, n)).padStart(2, '0');
+  document.getElementById('days').textContent    = pad(Math.floor(diff / 864e5));
+  document.getElementById('hours').textContent   = pad(Math.floor(diff % 864e5 / 36e5));
+  document.getElementById('minutes').textContent = pad(Math.floor(diff % 36e5 / 6e4));
+  document.getElementById('seconds').textContent = pad(Math.floor(diff % 6e4 / 1e3));
+}
+tick(); setInterval(tick, 1000);
+
+// ── COVER ENTRY ANIMATION ──
+gsap.to('.cover-title',    { opacity:1, y:0, duration:1.3, ease:'power3.out', delay:.2 });
+gsap.to('.cover-sub',      { opacity:1, y:0, duration:1,   ease:'power3.out', delay:.6 });
+gsap.to('.countdown-grid', { opacity:1, y:0, duration:1,   ease:'power3.out', delay:.9 });
+gsap.to('.open-btn',       { opacity:1, y:0, duration:1,   ease:'power3.out', delay:1.1 });
+
+setTimeout(() => showBubble("Hi! 💖 Open your gift!"), 2000);
+
+// ── GLOBAL BACKGROUND PHOTO FIELD ──
+// Runs immediately on page load behind all sections
+function initBgCanvas() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const imgs = gallery.map(g => {
+    const img = new Image(); img.src = g.src; return img;
+  });
+
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  const COUNT = Math.max(35, gallery.length * 4);
+  const particles = Array.from({ length: COUNT }, (_, i) => {
+    const s = {
+      imgIndex:   i % gallery.length,
+      hx:         randBetween(-0.90, 0.90),
+      hy:         randBetween(-0.85, 0.85),
+      wz:         randBetween(2.0, 5.5),
+      rot:        randBetween(-20, 20),
+      floatPhase: Math.random() * Math.PI * 2,
+      floatSpeed: randBetween(1.2, 3.0),
+      x: 0, y: 0, curRot: 0, curAlpha: 0,
+    };
+    s.x = s.hx; s.y = s.hy; s.curRot = s.rot;
+    return s;
+  });
+
+  let t = 0;
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    t += 0.006;
+
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    particles.forEach(s => {
+      const img = imgs[s.imgIndex];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      const fx = Math.cos(t * s.floatSpeed * 0.55 + s.floatPhase) * 0.035;
+      const fy = Math.sin(t * s.floatSpeed * 0.70 + s.floatPhase + 1.0) * 0.030;
+      const fr = Math.sin(t * s.floatSpeed * 0.40 + s.floatPhase) * 2.5;
+
+      const tx = s.hx + fx, ty = s.hy + fy, tr = s.rot + fr;
+
+      s.x      += (tx - s.x)      * 0.08;
+      s.y      += (ty - s.y)      * 0.08;
+      s.curRot += (tr - s.curRot) * 0.08;
+      s.curAlpha += (1 - s.curAlpha) * 0.008;
+
+      const depthF     = 0.55 / (s.wz * 0.30);
+      const cardW      = Math.min(160 * depthF, W * 0.18);
+      const cardH      = cardW * 0.76;
+      const brd        = Math.max(1, cardW * 0.04);
+      const bot        = Math.max(2, cardW * 0.15);
+      const depthAlpha = Math.max(0.1, 0.75 - s.wz * 0.055);
+      const finalAlpha = depthAlpha * s.curAlpha;
+
+      const sx = cx + s.x * W * 0.92;
+      const sy = cy + s.y * H * 0.88;
+
+      ctx.save();
+      ctx.globalAlpha = Math.min(1.5, Math.max(0.8, finalAlpha));
+      ctx.translate(sx, sy);
+      ctx.rotate(s.curRot * Math.PI / 180);
+      ctx.shadowColor = 'rgba(244,63,94,0.06)';
+      ctx.shadowBlur  = cardW * 0.10;
+      ctx.fillStyle   = '#ffffff';
+      ctx.fillRect(-cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot);
+      ctx.shadowBlur  = 0;
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+      ctx.restore();
+    });
+  })();
+}
+
+// Start the global bg canvas right away
+initBgCanvas();
+
+// ── OPEN GIFT ──
+document.getElementById('open-btn').addEventListener('click', () => {
+  heartShower();
+  const main = document.getElementById('main');
+  main.style.display = 'block';
+  requestAnimationFrame(() => {
+    initAll();
+    ScrollTrigger.refresh();
+    setTimeout(() => document.getElementById('proposal').scrollIntoView({ behavior:'smooth' }), 300);
+    showBubble("I've been waiting for this moment! 🎉💖");
+  });
+});
+
+function initAll() {
+  initFilmStrip();
+  initNumbers();
+  initKaraoke();
+  initTunnel();
+  initScrollAnimations();
+  initLetter();
+  initSlotMachine();
+}
+
+// ── FILM STRIP ──
+// ── INFINITE FILM STRIP ENGINE ──
+// ── INFINITE FILM STRIP ENGINE (GSAP BULLETPROOF VERSION) ──
+// ── AUTOMATIC INFINITE FILM STRIP MARQUEE ENGINE ──
+function initFilmStrip() {
+  const track = document.getElementById('filmstrip-track');
+  if (!track) return;
+  
+  // 1. Double the gallery items to create a seamless looping seamless layout trail
+  const frames = [...gallery, ...gallery];
+  track.innerHTML = ""; // Clear out any pre-existing DOM frames safely
+  
+  frames.forEach(item => {
+    const frame = document.createElement('div');
+    frame.className = 'film-frame';
+    frame.innerHTML = `
+      <div class="film-img-wrap">
+        <img src="${item.src}" alt="${item.title}" loading="lazy" />
+      </div>
+      <p class="film-caption">${item.title}</p>
+    `;
+    track.appendChild(frame);
+  });
+
+  // Ensure the track container handles wide inline elements without folding rows
+  track.style.display = 'flex';
+  track.style.whiteSpace = 'nowrap';
+
+  // 2. Wait until everything is calculated to execute hardware marquee speeds
+  window.addEventListener('load', () => {
+    const totalWidth = track.scrollWidth;
+    const loopThreshold = totalWidth / 2; // Exact length of one full data set array
+
+    // Create a linear continuous infinite tween
+    const marqueeTimeline = gsap.to(track, {
+      x: -loopThreshold,
+      duration: 30, // Speed calculation (Lower number = faster, Higher = more romantic slow crawl)
+      ease: "none",
+      repeat: -1,
+      modifiers: {
+        // Safe mod loop system wraps pixels seamlessly without layout flicker
+        x: gsap.utils.unitize(x => parseFloat(x) % loopThreshold)
+      }
+    });
+
+    // 3. Hover Interactions: Gently pause or slow down the ribbon line when she looks closer
+    track.addEventListener('mouseenter', () => {
+      gsap.to(marqueeTimeline, { timeScale: 0, duration: 0.5, ease: "power1.out" }); // Soft complete pause
+    });
+
+    track.addEventListener('mouseleave', () => {
+      gsap.to(marqueeTimeline, { timeScale: 1, duration: 0.8, ease: "power1.in" }); // Soft acceleration ramp back up
+    });
+  });
+
+  // Scroll-trigger entry transitions for header subtitles
+  document.querySelectorAll('#filmstrip-section .fade-up').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '#filmstrip-section', start: 'top 75%' },
+      opacity: 1, y: 0, duration: 1, delay: i * .15, ease: 'power3.out'
+    });
+  });
+
+  gsap.from(track, {
+    scrollTrigger: { trigger: '#filmstrip-section', start: 'top 70%' },
+    opacity: 0, y: 40, duration: 1.2, ease: 'power3.out', delay: .3
+  });
+}
+
+// ── US IN NUMBERS ──
+function initNumbers() {
+  const stats = [
+    { val: 731,   suffix: '',  label: 'days together' },
+    { val: 2,     suffix: '',  label: 'years of us' },
+    { val: 1,     suffix: '',  label: 'proposal that changed everything' },
+    { val: 5,     suffix: '+', label: 'cities explored together' },
+    { val: 0,     suffix: '',  label: 'regrets' },
+    { val: 10,    suffix: '+', label: 'movies watched together' },
+    { val: 999,   suffix: '+', label: 'inside jokes' },
+    { val: 1,     suffix: '',  label: 'person I want forever' },
+  ];
+
+  const grid = document.getElementById('numbers-grid');
+  stats.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'number-card fade-up';
+    card.innerHTML = `<span class="num-val" data-target="${s.val}" data-suffix="${s.suffix}">0${s.suffix}</span><p class="num-label">${s.label}</p>`;
+    grid.appendChild(card);
+
+    gsap.to(card, {
+      scrollTrigger: { trigger: '#numbers-section', start: 'top 65%' },
+      opacity: 1, y: 0, duration: .8, delay: i * .08, ease: 'power3.out'
+    });
+  });
+
+  // Count-up animation
+  ScrollTrigger.create({
+    trigger: '#numbers-section',
+    start: 'top 60%',
+    once: true,
+    onEnter: () => {
+      document.querySelectorAll('.num-val').forEach(el => {
+        const target  = +el.dataset.target;
+        const suffix  = el.dataset.suffix;
+        const dur     = target > 100 ? 2000 : 1200;
+        const start   = performance.now();
+        function step(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * ease) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+      showBubble("731 days of pure magic 💫");
+      bounceChar();
+    }
+  });
+
+  document.querySelectorAll('#numbers-section .fade-up').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '#numbers-section', start: 'top 75%' },
+      opacity: 1, y: 0, duration: 1, delay: i * .1, ease: 'power3.out'
+    });
+  });
+}
+
+// ── KARAOKE ──
+// ── KARAOKE SOUND ENGINE & LYRIC TRACKER ──
+function initKaraoke() {
+  // Tum Se Hi lyrics with timestamps in seconds
+  const lyrics = [
+    { t:  0,  text: "♪  Tum se hi din hota hai..." },
+    { t:  7,  text: "Suraj uga karte ho tum..." },
+    { t: 14,  text: "Tum se hi raat hoti hai..." },
+    { t: 21,  text: "Neend aati hai jab tum..." },
+    { t: 28,  text: "Ho tum se hi... tum se hi..." },
+    { t: 38,  text: "Jab se tum mile ho..." },
+    { t: 45,  text: "Khwabon mein khile ho..." },
+    { t: 52,  text: "Har lamha naya sa lage..." },
+    { t: 59,  text: "Teri aahat se dil bole..." },
+    { t: 66,  text: "Main toh doob jaata hoon..." },
+    { t: 73,  text: "Aankhon mein teri..." },
+    { t: 80,  text: "Khwaab bun jaata hoon..." },
+    { t: 90,  text: "Tum se hi din hota hai..." },
+    { t: 97,  text: "Suraj uga karte ho tum..." },
+    { t:104,  text: "Tum se hi raat hoti hai..." },
+    { t:111,  text: "Neend aati hai jab tum..." },
+    { t:118,  text: "Ho tum se hi... tum se hi..." },
+    { t:130,  text: "Aisa kya kar diya tumne..." },
+    { t:137,  text: "Ik hasi ne mujhe..." },
+    { t:144,  text: "Pehle churaya dil..." },
+    { t:151,  text: "Phir badla jeene ka style..." },
+    { t:158,  text: "Ab tum bino guzaara nahin..." },
+    { t:168,  text: "Tum se hi din hota hai..." },
+    { t:175,  text: "Suraj uga karte ho tum..." },
+    { t:182,  text: "Tum se hi raat hoti hai..." },
+    { t:189,  text: "Neend aati hai jab tum..." },
+    { t:196,  text: "Ho tum se hi... tum se hi... ♪" },
+  ];
+
+  const linesEl  = document.getElementById('karaoke-lines');
+  const playBtn  = document.getElementById('k-play');
+  const restBtn  = document.getElementById('k-restart');
+  const speedBtn = document.getElementById('k-speed');
+  const progress = document.getElementById('k-progress');
+  const timeCur  = document.getElementById('k-time-cur');
+  const timeTotal = document.getElementById('k-time-total');
+  
+  const speeds   = [1, 1.5, 2];
+  let speedIdx   = 0;
+  let activeIdx  = -1;
+
+  // 🌟 THE AUDIO INSTANCE FIX: Core HTML5 sound engine initialization
+  const audioTrack = new Audio('song.mp3');
+
+  // Inject lyrics elements inside the DOM
+  linesEl.innerHTML = ""; // Clear placeholders safely
+  lyrics.forEach((l, i) => {
+    const div = document.createElement('div');
+    div.className = 'k-line';
+    div.textContent = l.text;
+    div.id = `kl-${i}`;
+    linesEl.appendChild(div);
+  });
+
+  // Helper calculation to format seconds to clock strings neatly (MM:SS)
+  function fmt(s) {
+    if (isNaN(s)) return "0:00";
+    return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  }
+
+  // Handle setting total track duration string once media buffers completely
+  audioTrack.addEventListener('loadedmetadata', () => {
+    timeTotal.textContent = fmt(audioTrack.duration);
+  });
+
+  // Track lines update mapping based on active time status positions
+  function updateLine(t) {
+    let idx = -1;
+    for (let i = lyrics.length - 1; i >= 0; i--) {
+      if (t >= lyrics[i].t) { idx = i; break; }
+    }
+    if (idx === activeIdx) return;
+    if (activeIdx >= 0) {
+      document.getElementById(`kl-${activeIdx}`)?.classList.replace('active', 'past');
+    }
+    if (idx >= 0) {
+      const el = document.getElementById(`kl-${idx}`);
+      el?.classList.remove('past');
+      el?.classList.add('active');
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    activeIdx = idx;
+  }
+
+  // 🌟 High precision time tracking bound directly to the audio card playback progress
+  audioTrack.addEventListener('timeupdate', () => {
+    const curTime = audioTrack.currentTime;
+    const duration = audioTrack.duration || 272; // Fallback to base seconds length
+    const pct = (curTime / duration) * 100;
+    
+    progress.style.width = pct + '%';
+    timeCur.textContent  = fmt(curTime);
+    updateLine(curTime);
+  });
+
+  // Reset parameters cleanly when the audio tracks complete playing naturally
+  audioTrack.addEventListener('ended', () => {
+    playBtn.textContent = '▶';
+    audioTrack.currentTime = 0;
+    activeIdx = -1;
+    document.querySelectorAll('.k-line').forEach(el => el.classList.remove('active','past'));
+  });
+
+  // Play/Pause Action Controls
+  playBtn.addEventListener('click', () => {
+    if (audioTrack.paused) {
+      audioTrack.play();
+      playBtn.textContent = '⏸';
+      showBubble("Our song 🎶💖 Sing along!");
+      bounceChar();
+    } else {
+      audioTrack.pause();
+      playBtn.textContent = '▶';
+    }
+  });
+
+  // Restart Button Controller
+  restBtn.addEventListener('click', () => {
+    audioTrack.currentTime = 0;
+    if (audioTrack.paused) {
+      progress.style.width = '0%';
+      timeCur.textContent = '0:00';
+      activeIdx = -1;
+      document.querySelectorAll('.k-line').forEach(el => el.classList.remove('active','past'));
+    }
+  });
+
+  // Playback Speed Controller Tuning Matrix
+  speedBtn.addEventListener('click', () => {
+    speedIdx = (speedIdx + 1) % speeds.length;
+    speedBtn.textContent = speeds[speedIdx] + '×';
+    audioTrack.playbackRate = speeds[speedIdx]; // Adjusts audio physics speed engine instantly
+  });
+
+  // Scroll Trigger headings initialization
+  document.querySelectorAll('#karaoke-section .fade-up').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '#karaoke-section', start: 'top 70%' },
+      opacity: 1, y: 0, duration: 1, delay: i * .15, ease: 'power3.out'
+    });
+  });
+}
+
+// ── TUNNEL / FLOATING SPACE ENGINE ──
+function initTunnel() {
+  const canvas  = document.getElementById('tunnel-canvas');
+  const ctx     = canvas.getContext('2d');
+  const titleEl = document.getElementById('t-title');
+  const subEl   = document.getElementById('t-sub');
+  const section = document.getElementById('tunnel-section');
+  const spacer  = document.getElementById('tunnel-spacer');
+
+  const bgImgs   = gallery.map(g  => { const img = new Image(); img.src = g.src;  return img; });
+  const featImgs = featured.map(g => { const img = new Image(); img.src = g.src;  return img; });
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const BG_COUNT = Math.max(28, gallery.length * 3);
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function makeBackground(idx) {
+    return {
+      imgIndex:   idx % gallery.length,
+      hx:         randBetween(-0.80, 0.80),
+      hy:         randBetween(-0.70, 0.70),
+      wz:         randBetween(1.6, 4.5),
+      rot:        randBetween(-18, 18),
+      floatPhase: Math.random() * Math.PI * 2,
+      floatSpeed: randBetween(1.5, 3.5),
+      x: 0, y: 0, curRot: 0, curAlpha: 0,
+    };
+  }
+
+  const bgStars = Array.from({ length: BG_COUNT }, (_, i) => {
+    const s = makeBackground(i);
+    s.x = s.hx; s.y = s.hy; s.curRot = s.rot;
+    return s;
+  });
+
+  const featHomes = [
+    { hx: -0.58, hy: -0.38, wz: 2.0, rot: -10 },
+    { hx:  0.55, hy: -0.35, wz: 2.2, rot:   8 },
+    { hx: -0.55, hy:  0.28, wz: 1.9, rot: -13 },
+    { hx:  0.52, hy:  0.30, wz: 2.1, rot:  11 },
+    { hx:  0.00, hy:  0.50, wz: 2.3, rot:  -4 },
+    { hx: -0.22, hy: -0.55, wz: 2.0, rot:   6 },
+    { hx:  0.25, hy: -0.52, wz: 2.4, rot:  -7 },
+  ].slice(0, featured.length);
+
+  const featStars = featured.map((g, i) => ({
+    imgIndex:   i,
+    x:          featHomes[i].hx,
+    y:          featHomes[i].hy,
+    rot:        featHomes[i].rot,
+    alpha:      0.45,
+    floatPhase: Math.random() * Math.PI * 2,
+  }));
+
+  let activeIndex = 0, lastActive = -1, captionLock = false;
+  titleEl.style.transition = subEl.style.transition = 'opacity .3s';
+
+  function getProgress() {
+    const rect  = section.getBoundingClientRect();
+    const total = spacer.offsetHeight;
+    return Math.max(0, Math.min(0.9999, -rect.top / total));
+  }
+
+  let t = 0;
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    t += 0.006;
+
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+
+    const prog  = getProgress();
+    activeIndex = Math.min(featured.length - 1, Math.floor(prog * featured.length));
+
+    if (activeIndex !== lastActive && !captionLock) {
+      lastActive  = activeIndex;
+      captionLock = true;
+      titleEl.style.opacity = subEl.style.opacity = '0';
+      setTimeout(() => {
+        titleEl.textContent = featured[activeIndex].title;
+        subEl.textContent   = featured[activeIndex].sub;
+        titleEl.style.opacity = subEl.style.opacity = '1';
+        captionLock = false;
+        showBubble(featured[activeIndex].reaction);
+        bounceChar();
+      }, 320);
+    }
+
+    // Dark background for the tunnel section
+    ctx.fillStyle = '#040203';
+    ctx.fillRect(0, 0, W, H);
+
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W,H) * 0.75);
+    grd.addColorStop(0, 'rgba(44,0,14,0.50)');
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+
+    // Twinkling stars
+    for (let i = 0; i < 140; i++) {
+      const bx = (i * 193.7) % W;
+      const by = (i * 127.3 + 40) % H;
+      const br = 0.25 + (i % 4) * 0.18;
+      const tw = 0.07 + 0.07 * Math.sin(t * 2.3 + i * 0.61);
+      ctx.fillStyle = `rgba(255,210,225,${tw})`;
+      ctx.beginPath();
+      ctx.arc(bx, by, br, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Background floating photos
+    [...bgStars].sort((a, b) => b.wz - a.wz).forEach(s => {
+      const img = bgImgs[s.imgIndex];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      const fx = Math.cos(t * s.floatSpeed * 0.55 + s.floatPhase) * 0.035;
+      const fy = Math.sin(t * s.floatSpeed * 0.70 + s.floatPhase + 1.0) * 0.030;
+      const fr = Math.sin(t * s.floatSpeed * 0.40 + s.floatPhase) * 1.2;
+
+      const tx = s.hx + fx, ty = s.hy + fy, tr = s.rot + fr;
+      s.x      += (tx - s.x)      * 0.08;
+      s.y      += (ty - s.y)      * 0.08;
+      s.curRot += (tr - s.curRot) * 0.08;
+      s.curAlpha += (1 - s.curAlpha) * 0.012;
+
+      const depthF     = 0.62 / (s.wz * 0.34);
+      const cardW      = Math.min(180 * depthF, W * 0.22);
+      const cardH      = cardW * 0.76;
+      const depthAlpha = Math.max(0.04, 0.55 - s.wz * 0.10);
+      const finalAlpha = depthAlpha * 0.45 * s.curAlpha;
+      const brd        = Math.max(1.2, cardW * 0.04);
+      const bot        = Math.max(2,   cardW * 0.15);
+      const sx = cx + s.x * W * 0.92;
+      const sy = cy + s.y * H * 0.88;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.03, Math.min(0.5, finalAlpha));
+      ctx.translate(sx, sy);
+      ctx.rotate(s.curRot * Math.PI / 180);
+      ctx.shadowColor = 'rgba(244,63,94,0.08)';
+      ctx.shadowBlur  = cardW * 0.12;
+      ctx.fillStyle   = '#ffffff';
+      ctx.fillRect(-cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot);
+      ctx.shadowBlur  = 0;
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+      ctx.restore();
+    });
+
+    // Featured photos
+    const featDrawOrder = [];
+    for (let i = 0; i < featured.length; i++) {
+      if (i !== activeIndex) featDrawOrder.push(i);
+    }
+    featDrawOrder.push(activeIndex);
+
+    featDrawOrder.forEach(i => {
+      const s        = featStars[i];
+      const home     = featHomes[i];
+      const isActive = (i === activeIndex);
+
+      const fx = Math.cos(t * 0.55 + s.floatPhase) * 0.016;
+      const fy = Math.sin(t * 0.70 + s.floatPhase + 1.3) * 0.012;
+
+      let tx, ty, trot, talpha;
+      if (isActive) {
+        tx = 0.0; ty = 0.02; trot = 0; talpha = 1.0;
+      } else {
+        tx     = home.hx + fx;
+        ty     = home.hy + fy;
+        trot   = home.rot + Math.sin(t * 0.38 + s.floatPhase) * 2.8;
+        talpha = 0.55;
+      }
+
+      const spd = isActive ? 0.072 : 0.038;
+      s.x     += (tx     - s.x)     * spd;
+      s.y     += (ty     - s.y)     * spd;
+      s.rot   += (trot   - s.rot)   * spd;
+      s.alpha += (talpha - s.alpha) * spd;
+
+      const img = featImgs[i];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      let cardW, cardH;
+      if (isActive) {
+        cardW = Math.min(W * 0.42, 400);
+        cardH = cardW * 0.76;
+      } else {
+        const depthF = 0.75 / (home.wz * 0.38);
+        cardW = Math.min(200 * depthF, W * 0.27);
+        cardH = cardW * 0.76;
+      }
+
+      const sx  = cx + s.x * W;
+      const sy  = cy + s.y * H;
+      const brd = Math.max(2, cardW * 0.042);
+      const bot = Math.max(4, cardW * 0.17);
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.05, s.alpha);
+      ctx.translate(sx, sy);
+      ctx.rotate(s.rot * Math.PI / 180);
+      ctx.shadowColor = isActive ? 'rgba(244,63,94,0.70)' : 'rgba(244,63,94,0.15)';
+      ctx.shadowBlur  = isActive ? cardW * 0.55 : cardW * 0.18;
+      ctx.fillStyle   = '#ffffff';
+      ctx.fillRect(-cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot);
+      ctx.shadowBlur  = 0;
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+
+      if (isActive) {
+        ctx.fillStyle    = '#3d1a22';
+        const fs         = Math.max(13, cardW * 0.058);
+        ctx.font         = `italic ${fs}px 'Cormorant Garamond', serif`;
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(featured[i].title, 0, cardH/2 + bot * 0.50);
+      }
+
+      ctx.restore();
+    });
+  })();
+}
+
+// ── SCROLL ANIMATIONS ──
+function initScrollAnimations() {
+  document.querySelectorAll('#proposal .fade-up').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '#proposal', start: 'top 70%' },
+      opacity:1, y:0, duration:1, delay: i * .15, ease:'power3.out'
+    });
+  });
+
+  let climaxDone = false;
+  ScrollTrigger.create({
+    trigger: '#climax',
+    start: 'top 40%',
+    onEnter: () => {
+      if (climaxDone) return;
+      climaxDone = true;
+      heartShower();
+      setTimeout(heartShower, 1200);
+      setTimeout(heartShower, 2400);
+      showBubble("Happy Anniversary!! 🎉💖🎊");
+      bounceChar();
+    },
+    onLeaveBack: () => { climaxDone = false; }
+  });
+
+  document.querySelectorAll('#climax .fade-up').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '#climax', start: 'top 70%' },
+      opacity:1, y:0, duration:1, delay: i * .2, ease:'power3.out'
+    });
+  });
+
+  document.querySelectorAll('.memory-card').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width/2)  / r.width  * 10;
+      const y = (e.clientY - r.top  - r.height/2) / r.height * 10;
+      el.querySelector('.memory-card-inner').style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      if (!el.classList.contains('flipped'))
+        el.querySelector('.memory-card-inner').style.transform = '';
+    });
+  });
+}
+
+// ── TYPEWRITER LETTER ──
+function initLetter() {
+  const text = "Every day with you has been its own kind of magic. The laughter, the late nights, the quiet moments where we said everything without a single word. You showed me what it means to be truly seen, and I am so grateful it's you. Two years ago you walked into my life and rearranged everything. Thank you for choosing me, for loving me through all my edges, and for making ordinary days feel extraordinary. Here's to every single year that follows.";
+  const el   = document.getElementById('typewriter-text');
+  const sign = document.getElementById('letter-sign');
+  let typed  = false;
+
+  ScrollTrigger.create({
+    trigger: '#letter-section',
+    start: 'top 60%',
+    onEnter: () => {
+      if (typed) return;
+      typed = true;
+      showBubble("I wrote you something... 💌");
+      bounceChar();
+      let i = 0;
+      const interval = setInterval(() => {
+        el.textContent = text.slice(0, ++i);
+        if (i >= text.length) {
+          clearInterval(interval);
+          document.getElementById('blink').style.display = 'none';
+          gsap.to(sign, { opacity:1, y:0, duration:1, delay:.3 });
+        }
+      }, 28);
+    }
+  });
+}
+
+// ── BUBUCHAN ──
+let bubbleTimer;
+function showBubble(msg) {
+  const b = document.getElementById('char-bubble');
+  b.textContent = msg;
+  b.classList.add('visible');
+  clearTimeout(bubbleTimer);
+  bubbleTimer = setTimeout(() => b.classList.remove('visible'), 4000);
+}
+function bounceChar() {
+  const img = document.getElementById('char-img');
+  img.classList.remove('char-bounce');
+  void img.offsetWidth;
+  img.classList.add('char-bounce');
+  setTimeout(() => img.classList.remove('char-bounce'), 500);
+}
+document.getElementById('char-img').addEventListener('click', () => {
+  const msgs = [
+    "I love you both so much! 💖",
+    "Two years! That's amazing! 🥳",
+    "You two are the cutest! 🥰",
+    "Besties forever!! ✨",
+    "Scroll down for more surprises! 👀"
+  ];
+  showBubble(msgs[Math.floor(Math.random() * msgs.length)]);
+  bounceChar();
+});
+
+// ── SLOT MACHINE ──
+function initSlotMachine() {
+
+  // Each reel has its own set of emojis — left=feeling, mid=quality, right=moment
+  const reelData = [
+    // Reel 0 — the "feeling" reel
+    ['🥰','💖','🤩','😍','🥺','💫','✨','🌹','💝','🦋'],
+    // Reel 1 — the "quality" reel
+    ['💘','🌙','🌟','💐','🎀','🍀','🌸','⭐','🌈','💞'],
+    // Reel 2 — the "moment" reel
+    ['🎶','🌊','🔥','🍕','🎬','✈️','🌙','☕','🎁','💌'],
+  ];
+
+  // Each spin lands on one of these reasons — keyed by total index so every combo feels personal
+  const reasons = [
+    "The way your laugh fills an entire room and I forget everything else.",
+    "How you remember the tiny details I mentioned months ago.",
+    "The way you hold my hand a little tighter when you sense I'm nervous.",
+    "Your ability to turn the most ordinary Tuesday into something magical.",
+    "The warmth in your eyes when you talk about the things you love.",
+    "How you make me feel completely safe just by being there.",
+    "The way you always know exactly what I need, even before I do.",
+    "Your ridiculous, perfect sense of humor that makes me snort-laugh.",
+    "How fiercely you love the people in your life — including me.",
+    "The way you dance when no one's supposed to be watching.",
+    "How you've made me a better, braver, softer person just by loving me.",
+    "The tiny smile you get right before you say something sarcastic.",
+    "How you turn every meal into an event and every event into a memory.",
+    "The way you get genuinely excited over small beautiful things.",
+    "How home stopped being a place and started being wherever you are.",
+    "The way you fight for us, every single time, without hesitation.",
+    "Your patience — with the world, with me, with everything.",
+    "How you make silence feel comfortable and never empty.",
+    "The way you look at me like I'm the whole story, not just a chapter.",
+    "Every single day — all of them — because of you.",
+  ];
+
+  // Build reel DOM — repeat items to allow seamless scroll illusion
+  const VISIBLE   = 1;   // only 1 item visible in the window
+  const REPEAT    = 6;   // how many times to repeat the list for spinning effect
+
+  reelData.forEach((items, ri) => {
+    const inner = document.getElementById(`reel-inner-${ri}`);
+    // Fill with repeated copies
+    for (let r = 0; r < REPEAT; r++) {
+      items.forEach(emoji => {
+        const div = document.createElement('div');
+        div.className = 'slot-item';
+        div.textContent = emoji;
+        inner.appendChild(div);
+      });
+    }
+  });
+
+  const btn       = document.getElementById('slot-btn');
+  const resultEl  = document.getElementById('slot-result');
+  const countEl   = document.getElementById('slot-count');
+  const machineEl = document.getElementById('slot-machine');
+  let spinCount   = 0;
+  let spinning    = false;
+
+  // Scroll reel to a target index instantly (no transition)
+  function setReelPos(ri, itemIndex) {
+    const inner = document.getElementById(`reel-inner-${ri}`);
+    inner.style.transition = 'none';
+    inner.style.transform  = `translateY(-${itemIndex * 58}px)`;
+  }
+
+  // Animate reel to target index
+  function animateReel(ri, targetIndex, duration) {
+    return new Promise(resolve => {
+      const inner = document.getElementById(`reel-inner-${ri}`);
+      inner.style.transition = `transform ${duration}ms cubic-bezier(.17,.67,.35,1.1)`;
+      inner.style.transform  = `translateY(-${targetIndex * 58}px)`;
+      setTimeout(resolve, duration);
+    });
+  }
+
+  // Initialise all reels to the middle of their repeated list
+  reelData.forEach((items, ri) => {
+    const midStart = Math.floor(REPEAT / 2) * items.length;
+    setReelPos(ri, midStart);
+  });
+
+  btn.addEventListener('click', async () => {
+    if (spinning) return;
+    spinning = true;
+    btn.disabled = true;
+    resultEl.classList.remove('visible');
+
+    spinCount++;
+    countEl.textContent = `Spun ${spinCount} time${spinCount !== 1 ? 's' : ''}`;
+
+    // Pick final landing emoji index for each reel
+    const finalIndices = reelData.map(items => Math.floor(Math.random() * items.length));
+
+    // For each reel, spin to: several full rotations + land on chosen item
+    // We place the target in the last "copy" block so it always spins forward
+    const spinPromises = reelData.map((items, ri) => {
+      const totalItems  = items.length * REPEAT;
+      // Land in second-to-last copy block so there's room to spin
+      const landBlock   = REPEAT - 2;
+      const targetIndex = landBlock * items.length + finalIndices[ri];
+      // Stagger stop times: reel 0 stops first, reel 2 last
+      const duration    = 1400 + ri * 350 + Math.random() * 200;
+
+      // Fast-scroll illusion: first set to a mid position, then animate forward
+      const midBlock  = Math.floor(REPEAT / 2);
+      const midIndex  = midBlock * items.length + finalIndices[ri];
+      // Snap to just before target so spin is always forward
+      setReelPos(ri, midIndex - items.length * 2);
+      // Small delay to let DOM update
+      return new Promise(resolve => {
+        setTimeout(() => {
+          animateReel(ri, targetIndex, duration).then(resolve);
+        }, 30);
+      });
+    });
+
+    await Promise.all(spinPromises);
+
+    // Pick a reason — combine indices for variety
+    const reasonIndex = (finalIndices[0] * 7 + finalIndices[1] * 3 + finalIndices[2] + spinCount) % reasons.length;
+    resultEl.textContent = `"${reasons[reasonIndex]}"`;
+    resultEl.classList.add('visible');
+
+    // Win flash + bubuchan
+    machineEl.classList.remove('win-flash');
+    void machineEl.offsetWidth;
+    machineEl.classList.add('win-flash');
+    const bubbles = [
+      "That's SO true!! 🥺💖",
+      "Every single word! 💕",
+      "I'm not crying, you're crying 😭💖",
+      "This is everything 🌹",
+      "Spin again!! 🎰✨",
+    ];
+    showBubble(bubbles[spinCount % bubbles.length]);
+    bounceChar();
+
+    // Small heart burst
+    for (let h = 0; h < 12; h++) {
+      const heart = document.createElement('div');
+      heart.innerHTML = '♥';
+      const size = 12 + Math.random() * 14;
+      const sx   = Math.random() * 100;
+      const dur  = 1.5 + Math.random() * 1;
+      const del  = Math.random() * 0.4;
+      heart.style.cssText = `
+        position:fixed; left:${sx}vw; top:60vh;
+        font-size:${size}px; color:#f43f5e;
+        pointer-events:none; z-index:99998; user-select:none;
+        animation: heartFall ${dur}s ease-in ${del}s forwards;
+        opacity:0.9;
+      `;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), (dur + del + 0.5) * 1000);
+    }
+
+    spinning  = false;
+    btn.disabled = false;
+  });
+
+  // Scroll-trigger fade-up for the section headings
+  document.querySelectorAll('#slot-section .fade-up').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '#slot-section', start: 'top 70%' },
+      opacity: 1, y: 0, duration: 1, delay: i * .15, ease: 'power3.out'
+    });
+  });
+}
+</script>
+</body>
+</html>
