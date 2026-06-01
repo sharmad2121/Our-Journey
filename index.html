@@ -1009,7 +1009,7 @@ function tick() {
       bounceSpecificChar('right');
     }, "+=1.8")
     .add(() => {
-      showExplicitIntroBubble('left', 'bubu i have built something for you 🛠️💝');
+      showExplicitIntroBubble('left', 'bubu, i have built something for you 🛠️💝');
       bounceSpecificChar('left');
     }, "+=2.0")
     .add(() => {
@@ -1715,14 +1715,14 @@ function tick() {
 
   // 🌟 ENHANCED WITH INTRO STATE PROTECTION SYSTEM
   document.getElementById('char-img-right').addEventListener('click', () => {
-    if (isIntroPlaying) return; // Completely ignores clicks during cutscene intro
+    if (isIntroPlaying || diff > 0) return; // Completely ignores clicks during cutscene intro
     const msgs = ["I love you both so much! 💖", "Two years! That's amazing! 🥳", "You two are the cutest! 🥰", "Besties forever!! ✨"];
     showDualBubble(msgs[Math.floor(Math.random() * msgs.length)], "Hey, don't leave me out! Me too! 🥺");
     bounceAllChars();
   });
 
   document.getElementById('char-img-left').addEventListener('click', () => {
-    if (isIntroPlaying) return; // Completely ignores clicks during cutscene intro
+    if (isIntroPlaying || diff > 0) return; // Completely ignores clicks during cutscene intro
     const msgs = ["Always holding down the left wing! 😎", "Look at all these memories! 📸", "She is going to love this layout completely! 🥺", "Spin that slot machine section below! 🎰"];
     showDualBubble("He thinks he's so cool! 🙄💕", msgs[Math.floor(Math.random() * msgs.length)]);
     bounceAllChars();
