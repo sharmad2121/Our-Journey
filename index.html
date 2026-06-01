@@ -1060,8 +1060,7 @@
   
   // 🌟 CLICK GUARD STATE FLAG: Keeps the intro immune to user click overrides
   let isIntroPlaying = true; 
-  // 🌟 NEW STATE SEPARATOR: Keeps tunnel dialogue muted until she scrolls to it
-  let tunnelDialogueLocked = true;
+
   function randBetween(a, b) { return a + Math.random() * (b - a); }
 
   function heartShower() {
@@ -1590,25 +1589,24 @@ function initTunnel() {
     ctx.closePath();
   }
 
-let t = 0;
+  let t = 0;
 
-    (function loop() {
-      requestAnimationFrame(loop);
-      t += 0.006;
+  (function loop() {
+    requestAnimationFrame(loop);
+    t += 0.006;
 
-      const W = canvas.width, H = canvas.height;
-      const cx = W / 2, cy = H / 2;
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
 
-      const prog  = getProgress();
-      activeIndex = Math.min(featured.length - 1, Math.floor(prog * featured.length));
+    const prog  = getProgress();
+    activeIndex = Math.min(featured.length - 1, Math.floor(prog * featured.length));
 
-      // 🌟 THE CURE: Grab the bounding coordinates of the tunnel viewport section
-     // Inside initTunnel() -> (function loop() { ... })
+    // ── 🌟 THE SCROLL SAFEGUARD CHECK ──
     const tunnelRect = section.getBoundingClientRect();
     const isTunnelVisible = (tunnelRect.top <= window.innerHeight && tunnelRect.bottom >= 0);
 
-    // 🌟 CHANGE: Added !tunnelDialogueLocked condition to completely secure text overrides
-    if (activeIndex !== lastActive && !captionLock && isTunnelVisible && !tunnelDialogueLocked) {
+    // Lip sync triggers are strictly gated only if the target canvas corridor frame is visible!
+    if (activeIndex !== lastActive && !captionLock && isTunnelVisible) {
       lastActive  = activeIndex;
       captionLock = true;
       titleEl.style.opacity = subEl.style.opacity = '0';
@@ -1623,208 +1621,205 @@ let t = 0;
       }, 320);
     }
 
-      ctx.fillStyle = '#040203';
-      ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#040203';
+    ctx.fillRect(0, 0, W, H);
 
-      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W,H) * 0.75);
-      grd.addColorStop(0, 'rgba(44,0,14,0.50)');
-      grd.addColorStop(1, 'transparent');
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, W, H);
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W,H) * 0.75);
+    grd.addColorStop(0, 'rgba(44,0,14,0.50)');
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
 
-      // Twinkling background stars
-      for (let i = 0; i < 140; i++) {
-        const bx = (i * 193.7) % W;
-        const by = (i * 127.3 + 40) % H;
-        const br = 0.25 + (i % 4) * 0.18;
-        const tw = 0.07 + 0.07 * Math.sin(t * 2.3 + i * 0.61);
-        ctx.fillStyle = `rgba(255,210,225,${tw})`;
-        ctx.beginPath(); ctx.arc(bx, by, br, 0, Math.PI * 2); ctx.fill();
+    for (let i = 0; i < 140; i++) {
+      const bx = (i * 193.7) % W;
+      const by = (i * 127.3 + 40) % H;
+      const br = 0.25 + (i % 4) * 0.18;
+      const tw = 0.07 + 0.07 * Math.sin(t * 2.3 + i * 0.61);
+      ctx.fillStyle = `rgba(255,210,225,${tw})`;
+      ctx.beginPath(); ctx.arc(bx, by, br, 0, Math.PI * 2); ctx.fill();
+    }
+
+    [...bgStars].sort((a, b) => b.wz - a.wz).forEach(s => {
+      const img = bgImgs[s.imgIndex];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      const fx = Math.cos(t * s.floatSpeed * 0.55 + s.floatPhase) * 0.035;
+      const fy = Math.sin(t * s.floatSpeed * 0.70 + s.floatPhase + 1.0) * 0.030;
+      const fr = Math.sin(t * s.floatSpeed * 0.40 + s.floatPhase) * 1.2;
+
+      const tx = s.hx + fx, ty = s.hy + fy, tr = s.rot + fr;
+      s.x      += (tx - s.x)      * 0.08;
+      s.y      += (ty - s.y)      * 0.08;
+      s.curRot += (tr - s.curRot) * 0.08;
+      s.curAlpha += (1 - s.curAlpha) * 0.012;
+
+      const depthF      = 0.62 / (s.wz * 0.34);
+      const cardW       = Math.min(180 * depthF, W * 0.22);
+      const cardH       = cardW * 0.76;
+      const depthAlpha = Math.max(0.04, 0.55 - s.wz * 0.10);
+      const finalAlpha = depthAlpha * 0.45 * s.curAlpha;
+      const brd        = Math.max(1.2, cardW * 0.04);
+      const bot        = Math.max(2,   cardW * 0.15);
+      const sx = cx + s.x * W * 0.92;
+      const sy = cy + s.y * H * 0.88;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.03, Math.min(0.5, finalAlpha));
+      ctx.translate(sx, sy);
+      ctx.rotate(s.curRot * Math.PI / 180);
+
+      const cardGrd = ctx.createLinearGradient(-cardW/2, -cardH/2, cardW/2, cardH/2);
+      cardGrd.addColorStop(0, '#ffffff');
+      cardGrd.addColorStop(1, '#fff5f6');
+      ctx.fillStyle = cardGrd;
+      
+      drawRoundedRect(ctx, -cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot, 12);
+      ctx.fill();
+
+      ctx.save();
+      ctx.shadowBlur = 0;
+      drawRoundedRect(ctx, -cardW/2, -cardH/2, cardW, cardH, 6);
+      ctx.clip();
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+      ctx.restore();
+
+      ctx.restore();
+    });
+
+    const featDrawOrder = [];
+    for (let i = 0; i < featured.length; i++) {
+      if (i !== activeIndex) featDrawOrder.push(i);
+    }
+    featDrawOrder.push(activeIndex);
+
+    featDrawOrder.forEach(i => {
+      const s        = featStars[i];
+      const home     = featHomes[i];
+      const isActive = (i === activeIndex);
+
+      const fx = Math.cos(t * 0.55 + s.floatPhase) * 0.016;
+      const fy = Math.sin(t * 0.70 + s.floatPhase + 1.3) * 0.012;
+
+      let tx, ty, trot, talpha;
+      if (isActive) {
+        tx = 0.0; ty = 0.02; trot = 0; talpha = 1.0;
+      } else {
+        tx     = home.hx + fx;
+        ty     = home.hy + fy;
+        trot   = home.rot + Math.sin(t * 0.38 + s.floatPhase) * 2.8;
+        talpha = 0.55;
       }
 
-      // Ambient Background Cards
-      [...bgStars].sort((a, b) => b.wz - a.wz).forEach(s => {
-        const img = bgImgs[s.imgIndex];
-        if (!img || !img.complete || img.naturalWidth === 0) return;
+      const spd = isActive ? 0.072 : 0.038;
+      s.x      += (tx     - s.x)     * spd;
+      s.y      += (ty     - s.y)     * spd;
+      s.rot    += (trot   - s.rot)   * spd;
+      s.alpha  += (talpha - s.alpha) * spd;
 
-        const fx = Math.cos(t * s.floatSpeed * 0.55 + s.floatPhase) * 0.035;
-        const fy = Math.sin(t * s.floatSpeed * 0.70 + s.floatPhase + 1.0) * 0.030;
-        const fr = Math.sin(t * s.floatSpeed * 0.40 + s.floatPhase) * 1.2;
+      const img = featImgs[i];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
 
-        const tx = s.hx + fx, ty = s.hy + fy, tr = s.rot + fr;
-        s.x      += (tx - s.x)      * 0.08;
-        s.y      += (ty - s.y)      * 0.08;
-        s.curRot += (tr - s.curRot) * 0.08;
-        s.curAlpha += (1 - s.curAlpha) * 0.012;
+      let cardW, cardH;
+      if (isActive) {
+        cardW = Math.min(W * 0.42, 400);
+        cardH = cardW * 0.76;
+      } else {
+        const depthF = 0.75 / (home.wz * 0.38);
+        cardW = Math.min(200 * depthF, W * 0.27);
+        cardH = cardW * 0.76;
+      }
 
-        const depthF      = 0.62 / (s.wz * 0.34);
-        const cardW       = Math.min(180 * depthF, W * 0.22);
-        const cardH       = cardW * 0.76;
-        const depthAlpha = Math.max(0.04, 0.55 - s.wz * 0.10);
-        const finalAlpha = depthAlpha * 0.45 * s.curAlpha;
-        const brd        = Math.max(1.2, cardW * 0.04);
-        const bot        = Math.max(2,   cardW * 0.15);
-        const sx = cx + s.x * W * 0.92;
-        const sy = cy + s.y * H * 0.88;
+      const sx  = cx + s.x * W;
+      const sy  = cy + s.y * H;
+      const brd = Math.max(2, cardW * 0.042);
+      const bot = Math.max(4, cardW * 0.17);
 
-        ctx.save();
-        ctx.globalAlpha = Math.max(0.03, Math.min(0.5, finalAlpha));
-        ctx.translate(sx, sy);
-        ctx.rotate(s.curRot * Math.PI / 180);
+      const fullW = cardW + brd * 2;
+      const fullH = cardH + brd + bot;
 
-        const cardGrd = ctx.createLinearGradient(-cardW/2, -cardH/2, cardW/2, cardH/2);
-        cardGrd.addColorStop(0, '#ffffff');
-        cardGrd.addColorStop(1, '#fff5f6');
-        ctx.fillStyle = cardGrd;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.05, s.alpha);
+      ctx.translate(sx, sy);
+      ctx.rotate(s.rot * Math.PI / 180);
+
+      ctx.shadowColor = isActive ? 'rgba(244, 63, 94, 0.65)' : 'rgba(244, 63, 94, 0.15)';
+      ctx.shadowBlur  = isActive ? cardW * 0.45 : cardW * 0.15;
+
+      const cardGrd = ctx.createLinearGradient(-fullW/2, -fullH/2, fullW/2, fullH/2);
+      cardGrd.addColorStop(0, '#ffffff');
+      cardGrd.addColorStop(1, '#fff5f6');
+      ctx.fillStyle = cardGrd;
+
+      const activeRadius = isActive ? 16 : 10;
+      drawRoundedRect(ctx, -fullW/2, -cardH/2 - brd, fullW, fullH, activeRadius);
+      ctx.fill();
+
+      ctx.save();
+      ctx.shadowBlur = 0; 
+      drawRoundedRect(ctx, -cardW/2, -cardH/2, cardW, cardH, isActive ? 10 : 6);
+      ctx.clip();
+      ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
+      
+      const vignette = ctx.createRadialGradient(0, 0, cardW * 0.3, 0, 0, cardW * 0.6);
+      vignette.addColorStop(0, 'rgba(0,0,0,0)');
+      vignette.addColorStop(1, 'rgba(0,0,0,0.25)');
+      ctx.fillStyle = vignette;
+      ctx.fillRect(-cardW/2, -cardH/2, cardW, cardH);
+      ctx.restore();
+
+      ctx.save();
+      ctx.shadowBlur = 0; 
+      
+      s.hearts.forEach(h => {
+        let hx = 0, hy = 0;
+        const offsetRangeX = fullW / 2;
+        const offsetRangeY = fullH / 2;
+        const baselineY = (-cardH / 2 - brd) + fullH / 2;
+
+        if (h.side === 0) { 
+          hx = h.posFactor * fullW;
+          hy = -cardH / 2 - brd;
+        } else if (h.side === 1) { 
+          hx = fullW / 2;
+          hy = baselineY + h.posFactor * fullH;
+        } else if (h.side === 2) { 
+          hx = h.posFactor * fullW;
+          hy = (-cardH / 2 - brd) + fullH;
+        } else { 
+          hx = -fullW / 2;
+          hy = baselineY + h.posFactor * fullH;
+        }
+
+        const heartSize = cardW * h.sizeFactor * (isActive ? 1.2 : 1.0);
+        ctx.fillStyle = h.color;
         
-        drawRoundedRect(ctx, -cardW/2 - brd, -cardH/2 - brd, cardW + brd*2, cardH + brd + bot, 12);
-        ctx.fill();
-
         ctx.save();
+        ctx.translate(hx, hy);
+        ctx.rotate(Math.sin(t * 2 + h.posFactor * 10) * 0.15);
+        drawVectorHeart(ctx, 0, -heartSize/2, heartSize);
+        ctx.fill();
+        ctx.restore();
+      });
+      ctx.restore();
+
+      if (isActive) {
         ctx.shadowBlur = 0;
-        drawRoundedRect(ctx, -cardW/2, -cardH/2, cardW, cardH, 6);
-        ctx.clip();
-        ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
-        ctx.restore();
-
-        ctx.restore();
-      });
-
-      // Featured Target Focal Display Items
-      const featDrawOrder = [];
-      for (let i = 0; i < featured.length; i++) {
-        if (i !== activeIndex) featDrawOrder.push(i);
+        ctx.fillStyle    = '#4c111e';
+        const fs         = Math.max(13, cardW * 0.058);
+        ctx.font         = `italic 600 ${fs}px 'Cormorant Garamond', serif`;
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(featured[i].title, 0, cardH/2 + bot * 0.50);
       }
-      featDrawOrder.push(activeIndex);
 
-      featDrawOrder.forEach(i => {
-        const s        = featStars[i];
-        const home     = featHomes[i];
-        const isActive = (i === activeIndex);
-
-        const fx = Math.cos(t * 0.55 + s.floatPhase) * 0.016;
-        const fy = Math.sin(t * 0.70 + s.floatPhase + 1.3) * 0.012;
-
-        let tx, ty, trot, talpha;
-        if (isActive) {
-          tx = 0.0; ty = 0.02; trot = 0; talpha = 1.0;
-        } else {
-          tx     = home.hx + fx;
-          ty     = home.hy + fy;
-          trot   = home.rot + Math.sin(t * 0.38 + s.floatPhase) * 2.8;
-          talpha = 0.55;
-        }
-
-        const spd = isActive ? 0.072 : 0.038;
-        s.x      += (tx     - s.x)     * spd;
-        s.y      += (ty     - s.y)     * spd;
-        s.rot    += (trot   - s.rot)   * spd;
-        s.alpha  += (talpha - s.alpha) * spd;
-
-        const img = featImgs[i];
-        if (!img || !img.complete || img.naturalWidth === 0) return;
-
-        let cardW, cardH;
-        if (isActive) {
-          cardW = Math.min(W * 0.42, 400);
-          cardH = cardW * 0.76;
-        } else {
-          const depthF = 0.75 / (home.wz * 0.38);
-          cardW = Math.min(200 * depthF, W * 0.27);
-          cardH = cardW * 0.76;
-        }
-
-        const sx  = cx + s.x * W;
-        const sy  = cy + s.y * H;
-        const brd = Math.max(2, cardW * 0.042);
-        const bot = Math.max(4, cardW * 0.17);
-
-        const fullW = cardW + brd * 2;
-        const fullH = cardH + brd + bot;
-
-        ctx.save();
-        ctx.globalAlpha = Math.max(0.05, s.alpha);
-        ctx.translate(sx, sy);
-        ctx.rotate(s.rot * Math.PI / 180);
-
-        ctx.shadowColor = isActive ? 'rgba(244, 63, 94, 0.65)' : 'rgba(244, 63, 94, 0.15)';
-        ctx.shadowBlur  = isActive ? cardW * 0.45 : cardW * 0.15;
-
-        const cardGrd = ctx.createLinearGradient(-fullW/2, -fullH/2, fullW/2, fullH/2);
-        cardGrd.addColorStop(0, '#ffffff');
-        cardGrd.addColorStop(1, '#fff5f6');
-        ctx.fillStyle = cardGrd;
-
-        const activeRadius = isActive ? 16 : 10;
-        drawRoundedRect(ctx, -fullW/2, -cardH/2 - brd, fullW, fullH, activeRadius);
-        ctx.fill();
-
-        ctx.save();
-        ctx.shadowBlur = 0; 
-        drawRoundedRect(ctx, -cardW/2, -cardH/2, cardW, cardH, isActive ? 10 : 6);
-        ctx.clip();
-        ctx.drawImage(img, -cardW/2, -cardH/2, cardW, cardH);
-        
-        const vignette = ctx.createRadialGradient(0, 0, cardW * 0.3, 0, 0, cardW * 0.6);
-        vignette.addColorStop(0, 'rgba(0,0,0,0)');
-        vignette.addColorStop(1, 'rgba(0,0,0,0.25)');
-        ctx.fillStyle = vignette;
-        ctx.fillRect(-cardW/2, -cardH/2, cardW, cardH);
-        ctx.restore();
-
-        ctx.save();
-        ctx.shadowBlur = 0; 
-        
-        s.hearts.forEach(h => {
-          let hx = 0, hy = 0;
-          const offsetRangeX = fullW / 2;
-          const offsetRangeY = fullH / 2;
-          const baselineY = (-cardH / 2 - brd) + fullH / 2;
-
-          if (h.side === 0) { 
-            hx = h.posFactor * fullW;
-            hy = -cardH / 2 - brd;
-          } else if (h.side === 1) { 
-            hx = fullW / 2;
-            hy = baselineY + h.posFactor * fullH;
-          } else if (h.side === 2) { 
-            hx = h.posFactor * fullW;
-            hy = (-cardH / 2 - brd) + fullH;
-          } else { 
-            hx = -fullW / 2;
-            hy = baselineY + h.posFactor * fullH;
-          }
-
-          const heartSize = cardW * h.sizeFactor * (isActive ? 1.2 : 1.0);
-          ctx.fillStyle = h.color;
-          
-          ctx.save();
-          ctx.translate(hx, hy);
-          ctx.rotate(Math.sin(t * 2 + h.posFactor * 10) * 0.15);
-          drawVectorHeart(ctx, 0, -heartSize/2, heartSize);
-          ctx.fill();
-          ctx.restore();
-        });
-        ctx.restore();
-
-        if (isActive) {
-          ctx.shadowBlur = 0;
-          ctx.fillStyle    = '#4c111e';
-          const fs         = Math.max(13, cardW * 0.058);
-          ctx.font         = `italic 600 ${fs}px 'Cormorant Garamond', serif`;
-          ctx.textAlign    = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(featured[i].title, 0, cardH/2 + bot * 0.50);
-        }
-
-        ctx.restore();
-      });
-    })();
+      ctx.restore();
+    });
+  })();
 }
 
   // ── SCROLL TRIGGERS INITIALIZATION ──
 
-function initScrollAnimations() {
+  function initScrollAnimations() {
     document.querySelectorAll('#proposal .fade-up').forEach((el, i) => {
       gsap.to(el, {
         scrollTrigger: { trigger: '#proposal', start: 'top 70%' },
@@ -1846,17 +1841,6 @@ function initScrollAnimations() {
         bounceAllChars();
       },
       onLeaveBack: () => { climaxDone = false; }
-    });
-
-    // 🌟 UNLOCK PORTAL: When she officially enters the tunnel space container, remove the dialogue restriction flag!
-    ScrollTrigger.create({
-      trigger: '#tunnel-section',
-      start: 'top 75%',
-      onEnter: () => {
-        tunnelDialogueLocked = false;
-        // Forces a clean evaluation check on the current slide position frame instantly
-        lastActive = -1; 
-      }
     });
 
     document.querySelectorAll('#climax .fade-up').forEach((el, i) => {
@@ -2092,3 +2076,5 @@ function initScrollAnimations() {
 </script>
 </body>
 </html>
+
+open-btn
