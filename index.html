@@ -978,13 +978,14 @@ function tick() {
   gsap.to('.open-btn',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: 1.1 });
 
   // ── 🎬 CINEMATIC INTRO CONVERSATION CUTSCENE MATRIX ───────────────────────
+// ── 🎬 CINEMATIC INTRO CONVERSATION CUTSCENE MATRIX (MOBILE LAYERING FIX) ──
   window.addEventListener('DOMContentLoaded', () => {
     const diffTime = anniversary - Date.now();
     const isLocked = diffTime > 0;
 
     const scene = gsap.timeline();
 
-    // Step 1: Slide both characters into center stage with the layout gap parameters spread out to 58%
+    // Step 1: Slide both characters into center stage
     scene.to(['#char-guide-left', '#char-guide-right'], {
       opacity: 1,
       duration: 0.1
@@ -999,42 +1000,68 @@ function tick() {
       "-=1.2"
     );
 
-    // Step 2: Chronological dialogue chain setup
+    // Step 2: Dialogue Sequence with Active Layer Swapping (z-index updates)
     scene.add(() => {
+      // Bring duduchan (left) to the absolute front layer stack
+      document.getElementById('char-guide-left').style.zIndex = '1010';
+      document.getElementById('char-guide-right').style.zIndex = '1000';
+      
       showExplicitIntroBubble('left', 'Hi, i am duduchan 😎');
       bounceSpecificChar('left');
     })
     .add(() => {
+      // Bring bubuchan (right) to the front layer stack
+      document.getElementById('char-guide-left').style.zIndex = '1000';
+      document.getElementById('char-guide-right').style.zIndex = '1010';
+
       showExplicitIntroBubble('right', 'And i am bubuchan 💖');
       bounceSpecificChar('right');
     }, "+=1.8")
     .add(() => {
-      showExplicitIntroBubble('left', 'bubu, i have built something for you 🛠️💝');
+      // Switch back to duduchan
+      document.getElementById('char-guide-left').style.zIndex = '1010';
+      document.getElementById('char-guide-right').style.zIndex = '1000';
+
+      showExplicitIntroBubble('left', 'bubu i have built something for you 🛠️💝');
       bounceSpecificChar('left');
     }, "+=2.0")
     .add(() => {
-      showExplicitIntroBubble('right', 'oh really , please show me 🥹✨');
+      // Switch back to bubuchan
+      document.getElementById('char-guide-left').style.zIndex = '1000';
+      document.getElementById('char-guide-right').style.zIndex = '1010';
+
+      showExplicitIntroBubble('right', 'oh really , please show me 🥺✨');
       bounceSpecificChar('right');
     }, "+=2.0");
 
-    // Step 3: Conditional Branching Logic
+    // Step 3: Conditional Branch Routing
     if (isLocked) {
       scene.add(() => {
+        // Switch back to duduchan for teasing line
+        document.getElementById('char-guide-left').style.zIndex = '1010';
+        document.getElementById('char-guide-right').style.zIndex = '1000';
+
         showExplicitIntroBubble('left', 'Hehe, nooo! It’s a surprise! 🤫 You have to wait until June 2nd midnight! 😜🌙');
         bounceSpecificChar('left');
       }, "+=2.2")
       .add(() => {
+        // Switch back to bubuchan for final hmph line
+        document.getElementById('char-guide-left').style.zIndex = '1000';
+        document.getElementById('char-guide-right').style.zIndex = '1010';
+
         showExplicitIntroBubble('right', 'Hmph! You are mean! 😡 fine, counting down... ⏱️❤️');
         bounceSpecificChar('right');
       }, "+=2.2")
       .add(() => {
-        // Dialogue ends, but since it is locked, they remain center stage. 
-        // We flip the state guard flag off so the user can play with random clicks now!
         isIntroPlaying = false; 
       });
 
     } else {
       scene.add(() => {
+        // Switch back to duduchan to unlock everything
+        document.getElementById('char-guide-left').style.zIndex = '1010';
+        document.getElementById('char-guide-right').style.zIndex = '1000';
+
         showExplicitIntroBubble('left', 'Yes! The wait is over, let me open it right now! 🔓🎉');
         bounceSpecificChar('left');
       }, "+=2.2")
@@ -1042,6 +1069,10 @@ function tick() {
         document.getElementById('char-bubble-left').classList.remove('visible');
         document.getElementById('char-bubble-right').classList.remove('visible');
         
+        // Reset stack depths back to standard defaults upon clean up collapse
+        document.getElementById('char-guide-left').style.zIndex = '1000';
+        document.getElementById('char-guide-right').style.zIndex = '1000';
+
         gsap.to('#char-guide-left', {
           top: 'auto', bottom: '1.5rem',
           right: 'auto', left: '1.5rem',
@@ -1059,12 +1090,9 @@ function tick() {
           ease: 'power3.inOut',
           onComplete: () => {
             isIntroPlaying = false; 
-            
-            // 🌟 THE FIX: Unlock the button here safely after they have collapsed down!
             const openBtn = document.getElementById('open-btn');
             openBtn.removeAttribute('disabled');
             openBtn.textContent = "Open Your Gift 💖";
-
             showDualBubble("Hi! 💖 Open your gift!", "Waiting... 👀");
           }
         });
